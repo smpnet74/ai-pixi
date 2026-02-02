@@ -9,7 +9,7 @@
 # Author: Scott Peterson <sm_peterson@yahoo.com>
 # ============================================================================
 
-[project]
+[workspace]
 name = "ai-pixi"
 version = "0.1.0"
 description = "Comprehensive AI development environment with all tools from ai-menu"
@@ -22,34 +22,32 @@ platforms = ["linux-64", "linux-aarch64"]
 # ============================================================================
 [dependencies]
 # Core runtime environments
-nodejs = "22.*"
+nodejs = "24.*"
 python = "3.12.*"
 uv = ">=0.9.28,<0.10"
 
 # ============================================================================
-# SPECIAL TOOLS - Available via conda-forge
-# Uncomment the tools you want to install via pixi
+# SPECIAL TOOLS - Installed via apt/curl (not conda-forge)
 # ============================================================================
-
-# --- Search and Text Processing ---
-# ripgrep = "*"              # Fast search tool (rg command)
-# jq = "*"                   # JSON processor
-# yq = "*"                   # YAML processor
-# bat = "*"                  # Better cat with syntax highlighting
-# fd-find = "*"              # Better find alternative (fd command)
-
-# --- Git Tools ---
-# gh = "*"                   # GitHub CLI
-# lazygit = "*"              # Git TUI (terminal user interface)
-
-# --- Modern CLI Replacements ---
-# eza = "*"                  # Modern ls replacement (successor to exa)
-
-# --- Kubernetes ---
-# helm = "*"                 # Kubernetes package manager
-
-# --- Cloud Platforms ---
-# Note: modal-client is available via pip/uv, see tasks section below
+# Special system tools are installed globally via pixi tasks using apt or
+# official installers. This ensures latest versions and system-wide availability.
+#
+# To install special tools, use: pixi run install-<tool>
+# Example: pixi run install-ripgrep
+#
+# Available tools:
+#   - ripgrep (rg)     - Fast search tool
+#   - jq               - JSON processor
+#   - yq               - YAML processor
+#   - bat              - Better cat with syntax highlighting
+#   - fd               - Better find alternative
+#   - eza              - Modern ls replacement
+#   - gh               - GitHub CLI
+#   - helm             - Kubernetes package manager
+#   - lazygit          - Git TUI
+#
+# Or install all at once: pixi run install-all-special
+# ============================================================================
 
 
 # ============================================================================
@@ -97,6 +95,19 @@ echo '✨ CLI Enhancers:'
 echo '  pixi run install-claude-flow  # Claude Flow by ruvnet'
 echo '  pixi run install-spec-kit     # Spec Kit by GitHub'
 echo ''
+echo '🛠️  Special System Tools (installed globally):'
+echo '  pixi run install-ripgrep      # Fast search tool (rg)'
+echo '  pixi run install-jq           # JSON processor'
+echo '  pixi run install-yq           # YAML processor'
+echo '  pixi run install-bat          # Better cat with syntax highlighting'
+echo '  pixi run install-fd           # Better find alternative'
+echo '  pixi run install-eza          # Modern ls replacement'
+echo '  pixi run install-gh           # GitHub CLI'
+echo '  pixi run install-helm         # Kubernetes package manager'
+echo '  pixi run install-lazygit      # Git TUI'
+echo ''
+echo '  pixi run install-all-special  # Install ALL special tools'
+echo ''
 echo '🎯 Install Everything:'
 echo '  pixi run install-all          # Install ALL AI tools (npm + uv + custom)'
 echo ''
@@ -114,33 +125,157 @@ echo '  pixi run list-installed       # List all installed npm packages'
 echo '  pixi run list-uv-tools        # List all installed uv tools'
 echo ''
 echo '💡 Tips:'
+echo '  - Aliases are automatically added to ~/.zshrc when you install tools'
+echo '  - After installing, run: source ~/.zshrc (or restart shell)'
+echo '  - Then use tools from anywhere: amp, kimi, etc.'
 echo '  - All tools run in isolated pixi environment'
-echo '  - Use: pixi shell (to activate environment)'
-echo '  - Or:  pixi run <command> (to run without activation)'
+echo '  - Alternative: Use "pixi shell" to activate environment'
 echo ''
 """ }
 
 # --- NPM-based AI CLI Tools ---
-install-amp = { cmd = "npm install -g @sourcegraph/amp@latest", description = "Install Amp by Sourcegraph" }
-install-auggie = { cmd = "npm install -g @augmentcode/auggie", description = "Install Auggie by Augment Code" }
-install-codex = { cmd = "npm install -g @openai/codex", description = "Install Codex by OpenAI" }
-install-forgecode = { cmd = "npm install -g forgecode@latest", description = "Install Forgecode" }
-install-gemini = { cmd = "npm install -g @google/gemini-cli", description = "Install Gemini CLI by Google" }
-install-grok = { cmd = "npm install -g @vibe-kit/grok-cli", description = "Install Grok CLI" }
-install-opencode = { cmd = "npm install -g opencode-ai", description = "Install OpenCode CLI" }
-install-qodo = { cmd = "npm install -g @qodo/command", description = "Install Qodo CLI" }
-install-qoder = { cmd = "npm install -g @qoder-ai/qodercli", description = "Install Qoder by Qwen" }
+install-amp = { cmd = """
+npm install -g @sourcegraph/amp@latest && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias amp='pixi run --manifest-path $MANIFEST amp'" "$SHELL_RC" 2>/dev/null || (echo "alias amp='pixi run --manifest-path $MANIFEST amp'" >> "$SHELL_RC" && echo "✓ Added alias: amp")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Amp by Sourcegraph" }
+
+install-auggie = { cmd = """
+npm install -g @augmentcode/auggie && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias auggie='pixi run --manifest-path $MANIFEST auggie'" "$SHELL_RC" 2>/dev/null || (echo "alias auggie='pixi run --manifest-path $MANIFEST auggie'" >> "$SHELL_RC" && echo "✓ Added alias: auggie")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Auggie by Augment Code" }
+
+install-codex = { cmd = """
+npm install -g @openai/codex && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias codex='pixi run --manifest-path $MANIFEST codex'" "$SHELL_RC" 2>/dev/null || (echo "alias codex='pixi run --manifest-path $MANIFEST codex'" >> "$SHELL_RC" && echo "✓ Added alias: codex")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Codex by OpenAI" }
+
+install-forgecode = { cmd = """
+npm install -g forgecode@latest && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias forge='pixi run --manifest-path $MANIFEST forge'" "$SHELL_RC" 2>/dev/null || (echo "alias forge='pixi run --manifest-path $MANIFEST forge'" >> "$SHELL_RC" && echo "✓ Added alias: forge")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Forgecode" }
+
+install-gemini = { cmd = """
+npm install -g @google/gemini-cli && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias gemini='pixi run --manifest-path $MANIFEST gemini'" "$SHELL_RC" 2>/dev/null || (echo "alias gemini='pixi run --manifest-path $MANIFEST gemini'" >> "$SHELL_RC" && echo "✓ Added alias: gemini")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Gemini CLI by Google" }
+
+install-grok = { cmd = """
+npm install -g @vibe-kit/grok-cli && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias grok='pixi run --manifest-path $MANIFEST grok'" "$SHELL_RC" 2>/dev/null || (echo "alias grok='pixi run --manifest-path $MANIFEST grok'" >> "$SHELL_RC" && echo "✓ Added alias: grok")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Grok CLI" }
+
+install-opencode = { cmd = """
+npm install -g opencode-ai && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias opencode='pixi run --manifest-path $MANIFEST opencode'" "$SHELL_RC" 2>/dev/null || (echo "alias opencode='pixi run --manifest-path $MANIFEST opencode'" >> "$SHELL_RC" && echo "✓ Added alias: opencode")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install OpenCode CLI" }
+
+install-qodo = { cmd = """
+npm install -g @qodo/command && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias qodo='pixi run --manifest-path $MANIFEST qodo'" "$SHELL_RC" 2>/dev/null || (echo "alias qodo='pixi run --manifest-path $MANIFEST qodo'" >> "$SHELL_RC" && echo "✓ Added alias: qodo")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Qodo CLI" }
+
+install-qoder = { cmd = """
+npm install -g @qoder-ai/qodercli && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias qoder='pixi run --manifest-path $MANIFEST qodercli'" "$SHELL_RC" 2>/dev/null || (echo "alias qoder='pixi run --manifest-path $MANIFEST qodercli'" >> "$SHELL_RC" && echo "✓ Added alias: qoder")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Qoder by Qwen" }
 
 # Batch install all npm-based tools
-install-all-npm = { cmd = "npm install -g @sourcegraph/amp@latest @augmentcode/auggie @openai/codex forgecode@latest @google/gemini-cli @vibe-kit/grok-cli opencode-ai @qodo/command @qoder-ai/qodercli", description = "Install all npm-based AI CLI tools" }
+install-all-npm = { cmd = """
+npm install -g @sourcegraph/amp@latest @augmentcode/auggie @openai/codex forgecode@latest @google/gemini-cli @vibe-kit/grok-cli opencode-ai @qodo/command @qoder-ai/qodercli && \
+echo '' && echo '✓ All npm tools installed. Setting up aliases...' && \
+MANIFEST=$(cd $(dirname ${BASH_SOURCE[0]:-$0}) 2>/dev/null && pwd || pwd)/pixi.toml && \
+pixi run --manifest-path $MANIFEST setup-aliases-npm
+""", description = "Install all npm-based AI CLI tools" }
 
 # --- Python/uv-based AI CLI Tools ---
-install-kimi = { cmd = "uv tool install --python 3.13 kimi-cli", description = "Install Kimi by MoonshotAI" }
-install-openhands = { cmd = "uv tool install openhands", description = "Install OpenHands" }
-install-modal = { cmd = "uv pip install modal", description = "Install Modal serverless platform CLI" }
+install-kimi = { cmd = """
+uv tool install --python 3.13 kimi-cli && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias kimi='pixi run --manifest-path $MANIFEST kimi'" "$SHELL_RC" 2>/dev/null || (echo "alias kimi='pixi run --manifest-path $MANIFEST kimi'" >> "$SHELL_RC" && echo "✓ Added alias: kimi")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Kimi by MoonshotAI" }
+
+install-openhands = { cmd = """
+uv tool install openhands && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias openhands='pixi run --manifest-path $MANIFEST openhands'" "$SHELL_RC" 2>/dev/null || (echo "alias openhands='pixi run --manifest-path $MANIFEST openhands'" >> "$SHELL_RC" && echo "✓ Added alias: openhands")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install OpenHands" }
+
+install-modal = { cmd = """
+uv pip install modal && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias modal='pixi run --manifest-path $MANIFEST python -m modal'" "$SHELL_RC" 2>/dev/null || (echo "alias modal='pixi run --manifest-path $MANIFEST python -m modal'" >> "$SHELL_RC" && echo "✓ Added alias: modal")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Modal serverless platform CLI" }
 
 # Batch install all uv-based tools
-install-all-uv = { cmd = "uv tool install --python 3.13 kimi-cli && uv tool install openhands && uv pip install modal", description = "Install all Python/uv-based AI CLI tools" }
+install-all-uv = { cmd = """
+uv tool install --python 3.13 kimi-cli && uv tool install openhands && uv pip install modal && \
+echo '' && echo '✓ All uv tools installed. Setting up aliases...' && \
+MANIFEST=$(cd $(dirname ${BASH_SOURCE[0]:-$0}) 2>/dev/null && pwd || pwd)/pixi.toml && \
+pixi run --manifest-path $MANIFEST setup-aliases-uv
+""", description = "Install all Python/uv-based AI CLI tools" }
 
 # --- Custom Installer AI CLI Tools (require curl/bash) ---
 install-droid = { cmd = "curl -fsSL https://app.factory.ai/cli | sh", description = "Install Droid by Factory AI" }
@@ -152,11 +287,41 @@ install-plandex = { cmd = "curl -sL https://plandex.ai/install.sh | bash", descr
 install-all-custom = { cmd = "curl -fsSL https://app.factory.ai/cli | sh && curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash && curl -fsSL https://cli.kiro.dev/install | bash && curl -sL https://plandex.ai/install.sh | bash", description = "Install all custom installer AI CLI tools" }
 
 # --- CLI Enhancers ---
-install-claude-flow = { cmd = "npm install -g claude-flow@alpha", description = "Install Claude Flow by ruvnet" }
-install-spec-kit = { cmd = "uv tool install --from git+https://github.com/github/spec-kit.git specify-cli", description = "Install Spec Kit by GitHub" }
+install-claude-flow = { cmd = """
+npm install -g claude-flow@alpha && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias claude-flow='pixi run --manifest-path $MANIFEST claude-flow'" "$SHELL_RC" 2>/dev/null || (echo "alias claude-flow='pixi run --manifest-path $MANIFEST claude-flow'" >> "$SHELL_RC" && echo "✓ Added alias: claude-flow")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Claude Flow by ruvnet" }
+
+install-spec-kit = { cmd = """
+uv tool install --from git+https://github.com/github/spec-kit.git specify-cli && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias spec-kit='pixi run --manifest-path $MANIFEST spec-kit'" "$SHELL_RC" 2>/dev/null || (echo "alias spec-kit='pixi run --manifest-path $MANIFEST spec-kit'" >> "$SHELL_RC" && echo "✓ Added alias: spec-kit")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Spec Kit by GitHub" }
 
 # --- Install Everything ---
-install-all = { depends-on = ["install-all-npm", "install-all-uv", "install-all-custom", "install-claude-flow", "install-spec-kit"], description = "Install ALL AI CLI tools" }
+install-all = { cmd = """
+echo '📦 Installing all npm-based tools...' && \
+MANIFEST=$(cd $(dirname ${BASH_SOURCE[0]:-$0}) 2>/dev/null && pwd || pwd)/pixi.toml && \
+pixi run --manifest-path $MANIFEST install-all-npm && \
+echo '' && echo '🐍 Installing all uv-based tools...' && \
+pixi run --manifest-path $MANIFEST install-all-uv && \
+echo '' && echo '🔧 Installing custom installer tools...' && \
+pixi run --manifest-path $MANIFEST install-all-custom && \
+echo '' && echo '✨ Installing CLI enhancers...' && \
+pixi run --manifest-path $MANIFEST install-claude-flow && \
+pixi run --manifest-path $MANIFEST install-spec-kit && \
+echo '' && echo '✓ All tools installed! Aliases have been added to ~/.zshrc' && \
+echo 'Run: source ~/.zshrc (or restart your shell)'
+""", description = "Install ALL AI CLI tools" }
 
 # --- VS Code Extensions ---
 install-vscode-augment = { cmd = "code --install-extension augment.vscode-augment", description = "Install Augment Code extension" }
@@ -168,9 +333,86 @@ install-vscode-zencoder = { cmd = "code --install-extension zencoderai.zencoder"
 # Batch install all VS Code extensions
 install-all-vscode = { depends-on = ["install-vscode-augment", "install-vscode-kilo", "install-vscode-roo", "install-vscode-cline", "install-vscode-zencoder"], description = "Install all VS Code extensions" }
 
+# --- Special System Tools (installed globally via apt/curl) ---
+install-ripgrep = { cmd = "sudo apt-get update && sudo apt-get install -y ripgrep", description = "Install ripgrep (rg) - fast search tool" }
+install-jq = { cmd = "sudo apt-get update && sudo apt-get install -y jq", description = "Install jq - JSON processor" }
+install-yq = { cmd = "sudo apt-get update && sudo apt-get install -y yq", description = "Install yq - YAML processor" }
+install-bat = { cmd = "sudo apt-get update && sudo apt-get install -y bat", description = "Install bat - better cat with syntax highlighting" }
+install-fd = { cmd = "sudo apt-get update && sudo apt-get install -y fd-find", description = "Install fd - better find alternative" }
+install-eza = { cmd = "sudo apt-get update && sudo apt-get install -y eza", description = "Install eza - modern ls replacement" }
+install-gh = { cmd = "curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && sudo apt update && sudo apt install -y gh", description = "Install GitHub CLI" }
+install-helm = { cmd = "curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash", description = "Install Helm - Kubernetes package manager" }
+install-lazygit = { cmd = """
+bash -c '
+LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep "tag_name" | cut -d\\" -f4 | sed "s/v//")
+ARCH=$(uname -m)
+if [ "$ARCH" = "aarch64" ]; then
+    ARCH="arm64"
+else
+    ARCH="x86_64"
+fi
+curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_${ARCH}.tar.gz"
+tar xf lazygit.tar.gz lazygit
+sudo install lazygit /usr/local/bin
+rm lazygit lazygit.tar.gz
+echo "Installed lazygit version $LAZYGIT_VERSION for $ARCH"
+'
+""", description = "Install lazygit - Git TUI" }
+
+# Batch install all special tools
+install-all-special = { cmd = """
+echo '🔧 Installing special system tools...' && \
+MANIFEST=$(pwd)/pixi.toml && \
+pixi run --manifest-path $MANIFEST install-ripgrep && \
+pixi run --manifest-path $MANIFEST install-jq && \
+pixi run --manifest-path $MANIFEST install-yq && \
+pixi run --manifest-path $MANIFEST install-bat && \
+pixi run --manifest-path $MANIFEST install-fd && \
+pixi run --manifest-path $MANIFEST install-eza && \
+pixi run --manifest-path $MANIFEST install-gh && \
+pixi run --manifest-path $MANIFEST install-helm && \
+pixi run --manifest-path $MANIFEST install-lazygit && \
+echo '✓ All special tools installed!'
+""", description = "Install all special system tools" }
+
 # --- Management Commands ---
 list-installed = { cmd = "npm list -g --depth=0", description = "List all globally installed npm packages" }
 list-uv-tools = { cmd = "uv tool list", description = "List all installed uv tools" }
+
+# --- Shell Alias Setup (for bulk alias additions) ---
+setup-aliases-npm = { cmd = """
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+echo "Setting up NPM tool aliases in $SHELL_RC..." && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "  ✓ Added: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "  ✓ Added: npx")) && \
+(grep -qF "alias amp='pixi run --manifest-path $MANIFEST amp'" "$SHELL_RC" 2>/dev/null || (echo "alias amp='pixi run --manifest-path $MANIFEST amp'" >> "$SHELL_RC" && echo "  ✓ Added: amp")) && \
+(grep -qF "alias auggie='pixi run --manifest-path $MANIFEST auggie'" "$SHELL_RC" 2>/dev/null || (echo "alias auggie='pixi run --manifest-path $MANIFEST auggie'" >> "$SHELL_RC" && echo "  ✓ Added: auggie")) && \
+(grep -qF "alias codex='pixi run --manifest-path $MANIFEST codex'" "$SHELL_RC" 2>/dev/null || (echo "alias codex='pixi run --manifest-path $MANIFEST codex'" >> "$SHELL_RC" && echo "  ✓ Added: codex")) && \
+(grep -qF "alias forge='pixi run --manifest-path $MANIFEST forge'" "$SHELL_RC" 2>/dev/null || (echo "alias forge='pixi run --manifest-path $MANIFEST forge'" >> "$SHELL_RC" && echo "  ✓ Added: forge")) && \
+(grep -qF "alias gemini='pixi run --manifest-path $MANIFEST gemini'" "$SHELL_RC" 2>/dev/null || (echo "alias gemini='pixi run --manifest-path $MANIFEST gemini'" >> "$SHELL_RC" && echo "  ✓ Added: gemini")) && \
+(grep -qF "alias grok='pixi run --manifest-path $MANIFEST grok'" "$SHELL_RC" 2>/dev/null || (echo "alias grok='pixi run --manifest-path $MANIFEST grok'" >> "$SHELL_RC" && echo "  ✓ Added: grok")) && \
+(grep -qF "alias opencode='pixi run --manifest-path $MANIFEST opencode'" "$SHELL_RC" 2>/dev/null || (echo "alias opencode='pixi run --manifest-path $MANIFEST opencode'" >> "$SHELL_RC" && echo "  ✓ Added: opencode")) && \
+(grep -qF "alias qodo='pixi run --manifest-path $MANIFEST qodo'" "$SHELL_RC" 2>/dev/null || (echo "alias qodo='pixi run --manifest-path $MANIFEST qodo'" >> "$SHELL_RC" && echo "  ✓ Added: qodo")) && \
+(grep -qF "alias qoder='pixi run --manifest-path $MANIFEST qodercli'" "$SHELL_RC" 2>/dev/null || (echo "alias qoder='pixi run --manifest-path $MANIFEST qodercli'" >> "$SHELL_RC" && echo "  ✓ Added: qoder")) && \
+(grep -qF "alias claude-flow='pixi run --manifest-path $MANIFEST claude-flow'" "$SHELL_RC" 2>/dev/null || (echo "alias claude-flow='pixi run --manifest-path $MANIFEST claude-flow'" >> "$SHELL_RC" && echo "  ✓ Added: claude-flow")) && \
+echo "✓ NPM tool aliases added" && \
+echo "Run: source $SHELL_RC"
+""", description = "Setup aliases for npm-based tools" }
+
+setup-aliases-uv = { cmd = """
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+echo "Setting up uv/Python tool aliases in $SHELL_RC..." && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias kimi='pixi run --manifest-path $MANIFEST kimi'" "$SHELL_RC" 2>/dev/null || (echo "alias kimi='pixi run --manifest-path $MANIFEST kimi'" >> "$SHELL_RC" && echo "  ✓ Added: kimi")) && \
+(grep -qF "alias openhands='pixi run --manifest-path $MANIFEST openhands'" "$SHELL_RC" 2>/dev/null || (echo "alias openhands='pixi run --manifest-path $MANIFEST openhands'" >> "$SHELL_RC" && echo "  ✓ Added: openhands")) && \
+(grep -qF "alias modal='pixi run --manifest-path $MANIFEST python -m modal'" "$SHELL_RC" 2>/dev/null || (echo "alias modal='pixi run --manifest-path $MANIFEST python -m modal'" >> "$SHELL_RC" && echo "  ✓ Added: modal")) && \
+(grep -qF "alias spec-kit='pixi run --manifest-path $MANIFEST spec-kit'" "$SHELL_RC" 2>/dev/null || (echo "alias spec-kit='pixi run --manifest-path $MANIFEST spec-kit'" >> "$SHELL_RC" && echo "  ✓ Added: spec-kit")) && \
+echo "✓ uv/Python tool aliases added" && \
+echo "Run: source $SHELL_RC"
+""", description = "Setup aliases for uv/Python-based tools" }
 
 
 # ============================================================================

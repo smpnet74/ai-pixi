@@ -24,20 +24,23 @@ pixi install
 # View all available commands
 pixi run help
 
-# Install specific AI tools
+# Install specific AI tools (aliases added automatically!)
 pixi run install-amp         # Install Amp by Sourcegraph
 pixi run install-kimi        # Install Kimi by MoonshotAI
 pixi run install-claude-flow # Install Claude Flow enhancer
 
+# Reload your shell to use the new aliases
+source ~/.zshrc
+
+# Now use the tools from any directory!
+amp --help
+kimi --help
+
 # Or install everything at once
 pixi run install-all
 
-# Activate the environment
+# Alternative: Activate the pixi shell
 pixi shell
-
-# Now use the tools directly
-amp --help
-kimi --help
 ```
 
 ## What's Included
@@ -105,21 +108,23 @@ Install these if you use VS Code (requires `code` CLI in PATH):
 
 ### Special System Tools
 
-These are available via conda-forge. To install them, **uncomment** the desired tools in the `[dependencies]` section of `pixi.toml`, then run `pixi install`:
+These are installed **globally** (system-wide) using apt or official installers, just like in ai-menu. This ensures you get the latest versions directly from official sources.
 
-```toml
-[dependencies]
-# Uncomment the tools you want:
-ripgrep = "*"              # Fast search (rg)
-jq = "*"                   # JSON processor
-yq = "*"                   # YAML processor
-bat = "*"                  # Better cat
-fd-find = "*"              # Better find (fd)
-gh = "*"                   # GitHub CLI
-lazygit = "*"              # Git TUI
-eza = "*"                  # Modern ls replacement
-helm = "*"                 # Kubernetes package manager
-```
+| Tool | Command | Installation |
+|------|---------|--------------|
+| ripgrep | `rg` | `pixi run install-ripgrep` |
+| jq | `jq` | `pixi run install-jq` |
+| yq | `yq` | `pixi run install-yq` |
+| bat | `bat` | `pixi run install-bat` |
+| fd | `fd` | `pixi run install-fd` |
+| eza | `eza` | `pixi run install-eza` |
+| GitHub CLI | `gh` | `pixi run install-gh` |
+| Helm | `helm` | `pixi run install-helm` |
+| lazygit | `lazygit` | `pixi run install-lazygit` |
+
+**Batch install:** `pixi run install-all-special`
+
+**Note:** These tools are installed system-wide (not in pixi environment) and are immediately available in your PATH without needing aliases.
 
 ## Installation Patterns
 
@@ -127,9 +132,10 @@ helm = "*"                 # Kubernetes package manager
 ```bash
 # Install only what you need, when you need it
 pixi install                    # Get core dependencies
-pixi run install-amp            # Add Amp
-pixi run install-kimi           # Add Kimi
-pixi shell                      # Start using them
+pixi run install-amp            # Add Amp (alias auto-added to ~/.zshrc)
+pixi run install-kimi           # Add Kimi (alias auto-added to ~/.zshrc)
+source ~/.zshrc                 # Reload shell
+amp --version                   # Use from anywhere!
 ```
 
 ### Pattern 2: Install by Category
@@ -152,10 +158,53 @@ pixi run install-all
 
 ## Environment Management
 
-### Activating the Environment
+### Method 1: Auto-Added Aliases (Recommended - Just Like ai-menu!)
+
+**Aliases are automatically added when you install tools!** Just like ai-menu, each tool installation adds its alias to `~/.zshrc` or `~/.bashrc`:
 
 ```bash
-# Method 1: Enter a pixi shell (like conda activate)
+# Install a tool - alias is added automatically
+pixi run install-amp
+
+# Reload your shell
+source ~/.zshrc   # or source ~/.bashrc
+
+# Use the tool from anywhere!
+cd ~/my-project
+amp --help
+```
+
+**What gets aliased automatically:**
+- All npm tools: `amp`, `auggie`, `codex`, `forge`, `gemini`, `grok`, `opencode`, `qodo`, `qodercli`
+- All uv tools: `kimi`, `openhands`, `modal`
+- Enhancers: `claude-flow`, `spec-kit`
+- Utilities: `npm`, `npx` (added with any npm-based tool)
+
+**Benefits:**
+- ✅ Automatic - no extra steps needed
+- ✅ Per-tool basis - only aliases for installed tools
+- ✅ Use tools from any directory
+- ✅ Same workflow as ai-menu
+- ✅ Duplicate detection - safe to install multiple times
+
+**Manual alias setup (if needed):**
+```bash
+# Setup all tool aliases at once (for already-installed tools)
+pixi run setup-aliases
+
+# Or setup specific categories
+pixi run setup-aliases-npm    # Only npm-based tools
+pixi run setup-aliases-uv     # Only Python/uv tools
+
+# Remove all aliases
+pixi run remove-aliases
+source ~/.zshrc
+```
+
+### Method 2: Activating the Pixi Shell
+
+```bash
+# Enter a pixi shell (like conda activate)
 pixi shell
 
 # Now all tools are in your PATH
@@ -166,10 +215,10 @@ kimi --version
 exit
 ```
 
-### Running Without Activation
+### Method 3: Running Without Activation
 
 ```bash
-# Run tools without activating the environment
+# Run tools without activating the environment or aliases
 pixi run amp --version
 pixi run kimi --version
 pixi run npm list -g --depth=0
@@ -192,6 +241,8 @@ pixi run list-uv-tools
 | **Installation** | Build Go binary, run interactive TUI | Edit pixi.toml, run pixi commands |
 | **Updates** | Rebuild and redeploy when tools change | Edit pixi.toml tasks, no rebuild needed |
 | **Tool Selection** | Interactive menu | Command-line tasks |
+| **Shell Aliases** | ✅ Auto-added to ~/.zshrc | ✅ `pixi run setup-aliases` |
+| **Global Access** | ✅ Use tools from anywhere | ✅ Use tools from anywhere (after alias setup) |
 | **Flexibility** | Fixed menu options | Easy to add/modify tools |
 | **Learning Curve** | GUI-driven, user-friendly | CLI-driven, more control |
 | **Maintenance** | Go code + rebuild cycle | Single pixi.toml file |
