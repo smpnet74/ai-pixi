@@ -1,0 +1,292 @@
+# ============================================================================
+# AI Development Environment - Comprehensive Pixi Configuration
+# ============================================================================
+# This pixi.toml provides parity with the ai-menu project installation capabilities.
+# Simply uncomment the tools you want to use in the [dependencies] section and run:
+#   pixi install
+#
+# For npm-based tools, use the tasks in the [tasks] section.
+# Author: Scott Peterson <sm_peterson@yahoo.com>
+# ============================================================================
+
+[project]
+name = "ai-pixi"
+version = "0.1.0"
+description = "Comprehensive AI development environment with all tools from ai-menu"
+authors = ["Scott Peterson <sm_peterson@yahoo.com>"]
+channels = ["conda-forge"]
+platforms = ["linux-64", "linux-aarch64"]
+
+# ============================================================================
+# CORE DEPENDENCIES (Always Required)
+# ============================================================================
+[dependencies]
+# Core runtime environments
+nodejs = "22.*"
+python = "3.12.*"
+uv = ">=0.9.28,<0.10"
+
+# ============================================================================
+# SPECIAL TOOLS - Available via conda-forge
+# Uncomment the tools you want to install via pixi
+# ============================================================================
+
+# --- Search and Text Processing ---
+# ripgrep = "*"              # Fast search tool (rg command)
+# jq = "*"                   # JSON processor
+# yq = "*"                   # YAML processor
+# bat = "*"                  # Better cat with syntax highlighting
+# fd-find = "*"              # Better find alternative (fd command)
+
+# --- Git Tools ---
+# gh = "*"                   # GitHub CLI
+# lazygit = "*"              # Git TUI (terminal user interface)
+
+# --- Modern CLI Replacements ---
+# eza = "*"                  # Modern ls replacement (successor to exa)
+
+# --- Kubernetes ---
+# helm = "*"                 # Kubernetes package manager
+
+# --- Cloud Platforms ---
+# Note: modal-client is available via pip/uv, see tasks section below
+
+
+# ============================================================================
+# PIXI TASKS - Installation and Management Commands
+# ============================================================================
+[tasks]
+
+# --- Help Command ---
+help = { cmd = """
+echo '╔════════════════════════════════════════════════════════════════════════╗'
+echo '║                    AI-Pixi Environment Manager                         ║'
+echo '╚════════════════════════════════════════════════════════════════════════╝'
+echo ''
+echo 'Available installation tasks:'
+echo ''
+echo '📦 NPM-based AI CLI Tools:'
+echo '  pixi run install-amp          # Amp by Sourcegraph'
+echo '  pixi run install-auggie       # Auggie by Augment Code'
+echo '  pixi run install-codex        # Codex by OpenAI'
+echo '  pixi run install-forgecode    # Forgecode'
+echo '  pixi run install-gemini       # Gemini CLI by Google'
+echo '  pixi run install-grok         # Grok CLI'
+echo '  pixi run install-opencode     # OpenCode CLI'
+echo '  pixi run install-qodo         # Qodo CLI'
+echo '  pixi run install-qoder        # Qoder by Qwen'
+echo ''
+echo '  pixi run install-all-npm      # Install ALL npm-based tools at once'
+echo ''
+echo '🐍 Python/uv-based AI CLI Tools:'
+echo '  pixi run install-kimi         # Kimi by MoonshotAI'
+echo '  pixi run install-openhands    # OpenHands'
+echo '  pixi run install-modal        # Modal serverless platform'
+echo ''
+echo '  pixi run install-all-uv       # Install ALL uv-based tools at once'
+echo ''
+echo '🔧 Custom Installer AI CLI Tools:'
+echo '  pixi run install-droid        # Droid by Factory AI'
+echo '  pixi run install-goose        # Goose by Block'
+echo '  pixi run install-kiro         # Kiro CLI by AWS'
+echo '  pixi run install-plandex      # Plandex'
+echo ''
+echo '  pixi run install-all-custom   # Install ALL custom installer tools'
+echo ''
+echo '✨ CLI Enhancers:'
+echo '  pixi run install-claude-flow  # Claude Flow by ruvnet'
+echo '  pixi run install-spec-kit     # Spec Kit by GitHub'
+echo ''
+echo '🎯 Install Everything:'
+echo '  pixi run install-all          # Install ALL AI tools (npm + uv + custom)'
+echo ''
+echo '💻 VS Code Extensions (requires VS Code CLI):'
+echo '  pixi run install-vscode-augment    # Augment Code'
+echo '  pixi run install-vscode-kilo       # Kilo Code'
+echo '  pixi run install-vscode-roo        # Roo Code (Cline fork)'
+echo '  pixi run install-vscode-cline      # Cline (Claude Dev)'
+echo '  pixi run install-vscode-zencoder   # Zencoder'
+echo ''
+echo '  pixi run install-all-vscode        # Install ALL VS Code extensions'
+echo ''
+echo '🧹 Management:'
+echo '  pixi run list-installed       # List all installed npm packages'
+echo '  pixi run list-uv-tools        # List all installed uv tools'
+echo ''
+echo '💡 Tips:'
+echo '  - All tools run in isolated pixi environment'
+echo '  - Use: pixi shell (to activate environment)'
+echo '  - Or:  pixi run <command> (to run without activation)'
+echo ''
+""" }
+
+# --- NPM-based AI CLI Tools ---
+install-amp = { cmd = "npm install -g @sourcegraph/amp@latest", description = "Install Amp by Sourcegraph" }
+install-auggie = { cmd = "npm install -g @augmentcode/auggie", description = "Install Auggie by Augment Code" }
+install-codex = { cmd = "npm install -g @openai/codex", description = "Install Codex by OpenAI" }
+install-forgecode = { cmd = "npm install -g forgecode@latest", description = "Install Forgecode" }
+install-gemini = { cmd = "npm install -g @google/gemini-cli", description = "Install Gemini CLI by Google" }
+install-grok = { cmd = "npm install -g @vibe-kit/grok-cli", description = "Install Grok CLI" }
+install-opencode = { cmd = "npm install -g opencode-ai", description = "Install OpenCode CLI" }
+install-qodo = { cmd = "npm install -g @qodo/command", description = "Install Qodo CLI" }
+install-qoder = { cmd = "npm install -g @qoder-ai/qodercli", description = "Install Qoder by Qwen" }
+
+# Batch install all npm-based tools
+install-all-npm = { cmd = "npm install -g @sourcegraph/amp@latest @augmentcode/auggie @openai/codex forgecode@latest @google/gemini-cli @vibe-kit/grok-cli opencode-ai @qodo/command @qoder-ai/qodercli", description = "Install all npm-based AI CLI tools" }
+
+# --- Python/uv-based AI CLI Tools ---
+install-kimi = { cmd = "uv tool install --python 3.13 kimi-cli", description = "Install Kimi by MoonshotAI" }
+install-openhands = { cmd = "uv tool install openhands", description = "Install OpenHands" }
+install-modal = { cmd = "uv pip install modal", description = "Install Modal serverless platform CLI" }
+
+# Batch install all uv-based tools
+install-all-uv = { cmd = "uv tool install --python 3.13 kimi-cli && uv tool install openhands && uv pip install modal", description = "Install all Python/uv-based AI CLI tools" }
+
+# --- Custom Installer AI CLI Tools (require curl/bash) ---
+install-droid = { cmd = "curl -fsSL https://app.factory.ai/cli | sh", description = "Install Droid by Factory AI" }
+install-goose = { cmd = "curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash", description = "Install Goose by Block" }
+install-kiro = { cmd = "curl -fsSL https://cli.kiro.dev/install | bash", description = "Install Kiro CLI by AWS" }
+install-plandex = { cmd = "curl -sL https://plandex.ai/install.sh | bash", description = "Install Plandex" }
+
+# Batch install all custom installer tools
+install-all-custom = { cmd = "curl -fsSL https://app.factory.ai/cli | sh && curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash && curl -fsSL https://cli.kiro.dev/install | bash && curl -sL https://plandex.ai/install.sh | bash", description = "Install all custom installer AI CLI tools" }
+
+# --- CLI Enhancers ---
+install-claude-flow = { cmd = "npm install -g claude-flow@alpha", description = "Install Claude Flow by ruvnet" }
+install-spec-kit = { cmd = "uv tool install --from git+https://github.com/github/spec-kit.git specify-cli", description = "Install Spec Kit by GitHub" }
+
+# --- Install Everything ---
+install-all = { depends-on = ["install-all-npm", "install-all-uv", "install-all-custom", "install-claude-flow", "install-spec-kit"], description = "Install ALL AI CLI tools" }
+
+# --- VS Code Extensions ---
+install-vscode-augment = { cmd = "code --install-extension augment.vscode-augment", description = "Install Augment Code extension" }
+install-vscode-kilo = { cmd = "code --install-extension kilocode.kilo-code", description = "Install Kilo Code extension" }
+install-vscode-roo = { cmd = "code --install-extension rooveterinaryinc.roo-cline", description = "Install Roo Code extension" }
+install-vscode-cline = { cmd = "code --install-extension saoudrizwan.claude-dev", description = "Install Cline (Claude Dev) extension" }
+install-vscode-zencoder = { cmd = "code --install-extension zencoderai.zencoder", description = "Install Zencoder extension" }
+
+# Batch install all VS Code extensions
+install-all-vscode = { depends-on = ["install-vscode-augment", "install-vscode-kilo", "install-vscode-roo", "install-vscode-cline", "install-vscode-zencoder"], description = "Install all VS Code extensions" }
+
+# --- Management Commands ---
+list-installed = { cmd = "npm list -g --depth=0", description = "List all globally installed npm packages" }
+list-uv-tools = { cmd = "uv tool list", description = "List all installed uv tools" }
+
+
+# ============================================================================
+# INSTALLATION REFERENCE GUIDE
+# ============================================================================
+#
+# This section documents all tools and their installation methods for reference.
+# Use the tasks above to actually install them.
+#
+# ┌─────────────────────────────────────────────────────────────────────────┐
+# │ NPM-BASED AI CLI TOOLS (via npm install -g)                             │
+# ├─────────────────────────────────────────────────────────────────────────┤
+# │ Package                    │ Command Alias │ Description                │
+# ├────────────────────────────┼───────────────┼────────────────────────────┤
+# │ @sourcegraph/amp@latest    │ amp           │ Amp by Sourcegraph         │
+# │ @augmentcode/auggie        │ auggie        │ Auggie by Augment Code     │
+# │ @openai/codex              │ codex         │ Codex by OpenAI            │
+# │ forgecode@latest           │ forge         │ Forgecode                  │
+# │ @google/gemini-cli         │ gemini        │ Gemini CLI by Google       │
+# │ @vibe-kit/grok-cli         │ grok          │ Grok CLI                   │
+# │ opencode-ai                │ opencode      │ OpenCode CLI               │
+# │ @qodo/command              │ qodo          │ Qodo CLI                   │
+# │ @qoder-ai/qodercli         │ qodercli      │ Qoder by Qwen              │
+# └────────────────────────────┴───────────────┴────────────────────────────┘
+#
+# ┌─────────────────────────────────────────────────────────────────────────┐
+# │ PYTHON/UV-BASED AI CLI TOOLS                                            │
+# ├─────────────────────────────────────────────────────────────────────────┤
+# │ Package                    │ Command       │ Install Method             │
+# ├────────────────────────────┼───────────────┼────────────────────────────┤
+# │ kimi-cli                   │ kimi          │ uv tool install            │
+# │ openhands                  │ openhands     │ uv tool install            │
+# │ modal                      │ modal         │ uv pip install             │
+# └────────────────────────────┴───────────────┴────────────────────────────┘
+#
+# ┌─────────────────────────────────────────────────────────────────────────┐
+# │ CUSTOM INSTALLER AI CLI TOOLS (via curl scripts)                        │
+# ├─────────────────────────────────────────────────────────────────────────┤
+# │ Tool      │ Command   │ Install URL                                     │
+# ├───────────┼───────────┼─────────────────────────────────────────────────┤
+# │ droid     │ droid     │ https://app.factory.ai/cli                      │
+# │ goose     │ goose     │ https://github.com/block/goose/...              │
+# │ kiro      │ kiro-cli  │ https://cli.kiro.dev/install                    │
+# │ plandex   │ plandex   │ https://plandex.ai/install.sh                   │
+# └───────────┴───────────┴─────────────────────────────────────────────────┘
+#
+# ┌─────────────────────────────────────────────────────────────────────────┐
+# │ CLI ENHANCERS                                                            │
+# ├─────────────────────────────────────────────────────────────────────────┤
+# │ claude-flow@alpha          │ Claude CLI enhancer by ruvnet (npm)        │
+# │ specify-cli                │ GitHub Spec Kit (uv tool install from git) │
+# └────────────────────────────┴────────────────────────────────────────────┘
+#
+# ┌─────────────────────────────────────────────────────────────────────────┐
+# │ VS CODE EXTENSIONS (via code --install-extension)                       │
+# ├─────────────────────────────────────────────────────────────────────────┤
+# │ augment.vscode-augment     │ Augment Code                               │
+# │ kilocode.kilo-code         │ Kilo Code                                  │
+# │ rooveterinaryinc.roo-cline │ Roo Code (Cline fork)                      │
+# │ saoudrizwan.claude-dev     │ Cline (formerly Claude Dev)                │
+# │ zencoderai.zencoder        │ Zencoder                                   │
+# └────────────────────────────┴────────────────────────────────────────────┘
+#
+# ┌─────────────────────────────────────────────────────────────────────────┐
+# │ SPECIAL TOOLS (Available via conda-forge - uncomment in dependencies)   │
+# ├─────────────────────────────────────────────────────────────────────────┤
+# │ ripgrep                    │ Fast search tool (rg)                      │
+# │ jq                         │ JSON processor                             │
+# │ yq                         │ YAML processor                             │
+# │ bat                        │ Better cat with syntax highlighting        │
+# │ fd-find                    │ Better find alternative (fd)               │
+# │ gh                         │ GitHub CLI                                 │
+# │ lazygit                    │ Git TUI                                    │
+# │ eza                        │ Modern ls replacement                      │
+# │ helm                       │ Kubernetes package manager                 │
+# └────────────────────────────┴────────────────────────────────────────────┘
+#
+# ============================================================================
+# USAGE EXAMPLES
+# ============================================================================
+#
+# 1. Initialize and install core dependencies:
+#    pixi install
+#
+# 2. View available commands:
+#    pixi run help
+#
+# 3. Install specific tool:
+#    pixi run install-amp
+#    pixi run install-kimi
+#
+# 4. Install all tools at once:
+#    pixi run install-all
+#
+# 5. Activate environment and use tools directly:
+#    pixi shell
+#    amp --help
+#    kimi --help
+#
+# 6. Run tool without activating environment:
+#    pixi run amp --help
+#    pixi run kimi --help
+#
+# 7. Add system tools (edit [dependencies] section and uncomment desired tools):
+#    # ripgrep = "*"
+#    Then run: pixi install
+#
+# ============================================================================
+# NOTES
+# ============================================================================
+#
+# - All npm packages install globally within the pixi environment
+# - Python packages install via uv in the pixi environment
+# - Custom installers may install to ~/.local/bin or /usr/local/bin
+# - VS Code extensions require VS Code CLI to be available in PATH
+# - Some tools may require additional configuration (API keys, etc.)
+# - Run 'pixi run help' for a formatted list of all available commands
+#
+# ============================================================================

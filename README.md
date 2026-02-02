@@ -1,0 +1,302 @@
+# AI-Pixi: Comprehensive AI Development Environment
+
+This pixi environment provides **complete parity** with the [ai-menu](https://github.com/smpnet74/ai-menu/) project, offering all the same AI tools and capabilities but in a single, maintainable `pixi.toml` configuration file.
+
+## Philosophy
+
+Instead of rebuilding and redeploying a Go-based interactive installer every time the AI tool landscape changes, this approach lets you:
+
+- 📝 Maintain one comprehensive `pixi.toml` with all tools documented
+- 🔧 Uncomment dependencies as needed for system tools (ripgrep, jq, bat, etc.)
+- ⚡ Run simple pixi tasks to install AI tools on demand
+- 📦 Keep everything in an isolated, reproducible pixi environment
+- 🚀 Install tools individually or in batches as requirements evolve
+
+## Quick Start
+
+```bash
+# Navigate to the ai-pixi directory
+cd ai-pixi
+
+# Initialize the environment (installs Node.js 22.*, Python 3.12.*, uv)
+pixi install
+
+# View all available commands
+pixi run help
+
+# Install specific AI tools
+pixi run install-amp         # Install Amp by Sourcegraph
+pixi run install-kimi        # Install Kimi by MoonshotAI
+pixi run install-claude-flow # Install Claude Flow enhancer
+
+# Or install everything at once
+pixi run install-all
+
+# Activate the environment
+pixi shell
+
+# Now use the tools directly
+amp --help
+kimi --help
+```
+
+## What's Included
+
+This environment provides access to **15+ AI CLI tools**, **5 VS Code extensions**, **9 special system tools**, and **2 CLI enhancers**.
+
+### AI CLI Tools
+
+#### NPM-based Tools (9 tools)
+| Tool | Command | Installation |
+|------|---------|--------------|
+| Amp | `amp` | `pixi run install-amp` |
+| Auggie | `auggie` | `pixi run install-auggie` |
+| Codex | `codex` | `pixi run install-codex` |
+| Forgecode | `forge` | `pixi run install-forgecode` |
+| Gemini CLI | `gemini` | `pixi run install-gemini` |
+| Grok CLI | `grok` | `pixi run install-grok` |
+| OpenCode | `opencode` | `pixi run install-opencode` |
+| Qodo | `qodo` | `pixi run install-qodo` |
+| Qoder | `qodercli` | `pixi run install-qoder` |
+
+**Batch install:** `pixi run install-all-npm`
+
+#### Python/uv-based Tools (3 tools)
+| Tool | Command | Installation |
+|------|---------|--------------|
+| Kimi | `kimi` | `pixi run install-kimi` |
+| OpenHands | `openhands` | `pixi run install-openhands` |
+| Modal | `modal` | `pixi run install-modal` |
+
+**Batch install:** `pixi run install-all-uv`
+
+#### Custom Installer Tools (4 tools)
+These tools use their own installation scripts:
+
+| Tool | Command | Installation |
+|------|---------|--------------|
+| Droid | `droid` | `pixi run install-droid` |
+| Goose | `goose` | `pixi run install-goose` |
+| Kiro | `kiro-cli` | `pixi run install-kiro` |
+| Plandex | `plandex` | `pixi run install-plandex` |
+
+**Batch install:** `pixi run install-all-custom`
+
+### CLI Enhancers
+
+| Tool | Command | Installation |
+|------|---------|--------------|
+| Claude Flow | `claude-flow` | `pixi run install-claude-flow` |
+| Spec Kit | `spec-kit` | `pixi run install-spec-kit` |
+
+### VS Code Extensions
+
+Install these if you use VS Code (requires `code` CLI in PATH):
+
+| Extension ID | Name | Installation |
+|--------------|------|--------------|
+| `augment.vscode-augment` | Augment Code | `pixi run install-vscode-augment` |
+| `kilocode.kilo-code` | Kilo Code | `pixi run install-vscode-kilo` |
+| `rooveterinaryinc.roo-cline` | Roo Code | `pixi run install-vscode-roo` |
+| `saoudrizwan.claude-dev` | Cline | `pixi run install-vscode-cline` |
+| `zencoderai.zencoder` | Zencoder | `pixi run install-vscode-zencoder` |
+
+**Batch install:** `pixi run install-all-vscode`
+
+### Special System Tools
+
+These are available via conda-forge. To install them, **uncomment** the desired tools in the `[dependencies]` section of `pixi.toml`, then run `pixi install`:
+
+```toml
+[dependencies]
+# Uncomment the tools you want:
+ripgrep = "*"              # Fast search (rg)
+jq = "*"                   # JSON processor
+yq = "*"                   # YAML processor
+bat = "*"                  # Better cat
+fd-find = "*"              # Better find (fd)
+gh = "*"                   # GitHub CLI
+lazygit = "*"              # Git TUI
+eza = "*"                  # Modern ls replacement
+helm = "*"                 # Kubernetes package manager
+```
+
+## Installation Patterns
+
+### Pattern 1: Install as Needed (Recommended)
+```bash
+# Install only what you need, when you need it
+pixi install                    # Get core dependencies
+pixi run install-amp            # Add Amp
+pixi run install-kimi           # Add Kimi
+pixi shell                      # Start using them
+```
+
+### Pattern 2: Install by Category
+```bash
+# Install all npm-based tools
+pixi run install-all-npm
+
+# Install all Python tools
+pixi run install-all-uv
+
+# Install all custom installer tools
+pixi run install-all-custom
+```
+
+### Pattern 3: Install Everything
+```bash
+# Nuclear option: install all AI CLI tools
+pixi run install-all
+```
+
+## Environment Management
+
+### Activating the Environment
+
+```bash
+# Method 1: Enter a pixi shell (like conda activate)
+pixi shell
+
+# Now all tools are in your PATH
+amp --version
+kimi --version
+
+# Exit with:
+exit
+```
+
+### Running Without Activation
+
+```bash
+# Run tools without activating the environment
+pixi run amp --version
+pixi run kimi --version
+pixi run npm list -g --depth=0
+```
+
+### Checking What's Installed
+
+```bash
+# List npm packages
+pixi run list-installed
+
+# List uv tools
+pixi run list-uv-tools
+```
+
+## Comparison with ai-menu
+
+| Aspect | ai-menu | ai-pixi |
+|--------|---------|---------|
+| **Installation** | Build Go binary, run interactive TUI | Edit pixi.toml, run pixi commands |
+| **Updates** | Rebuild and redeploy when tools change | Edit pixi.toml tasks, no rebuild needed |
+| **Tool Selection** | Interactive menu | Command-line tasks |
+| **Flexibility** | Fixed menu options | Easy to add/modify tools |
+| **Learning Curve** | GUI-driven, user-friendly | CLI-driven, more control |
+| **Maintenance** | Go code + rebuild cycle | Single pixi.toml file |
+| **Dependencies** | Go 1.21+, compilation | Pixi only |
+
+## Advanced Usage
+
+### Adding New Tools
+
+To add a new AI CLI tool:
+
+1. **If it's npm-based:**
+   ```toml
+   [tasks]
+   install-newtool = { cmd = "npm install -g package-name", description = "Install NewTool" }
+   ```
+
+2. **If it's Python-based:**
+   ```toml
+   [tasks]
+   install-newtool = { cmd = "uv tool install package-name", description = "Install NewTool" }
+   ```
+
+3. **If it uses a custom installer:**
+   ```toml
+   [tasks]
+   install-newtool = { cmd = "curl -fsSL https://example.com/install.sh | bash", description = "Install NewTool" }
+   ```
+
+### Creating Tool Aliases
+
+If you want aliases in your shell (like ai-menu does), add to your `~/.zshrc` or `~/.bashrc`:
+
+```bash
+# AI-Pixi tool aliases
+alias amp='pixi run --manifest-path /path/to/ai-pixi/pixi.toml amp'
+alias kimi='pixi run --manifest-path /path/to/ai-pixi/pixi.toml kimi'
+# ... etc
+```
+
+Or use the pixi shell approach for automatic PATH management.
+
+## Troubleshooting
+
+### "Command not found" after installation
+
+**Solution:** Some tools require environment restart:
+```bash
+# Exit and re-enter pixi shell
+exit
+pixi shell
+```
+
+### npm packages not found
+
+**Solution:** Ensure you're in pixi shell or use `pixi run`:
+```bash
+pixi shell
+npm list -g --depth=0
+```
+
+### Custom installers fail
+
+**Solution:** Custom installers (droid, goose, kiro, plandex) may install to `~/.local/bin` or require specific system dependencies. Check tool documentation.
+
+### VS Code extension installation fails
+
+**Solution:** Ensure VS Code CLI is available:
+```bash
+which code
+# If not found, install VS Code and add to PATH
+```
+
+## Platform Support
+
+- **Linux (x64)**: ✅ Full support
+- **Linux (ARM64)**: ✅ Full support
+- **macOS**: ⚠️ Most tools supported (may need platform adjustment in pixi.toml)
+- **Windows**: ⚠️ WSL2 recommended
+
+## Contributing
+
+To add new AI tools to this configuration:
+
+1. Test the installation command
+2. Add task to `[tasks]` section
+3. Document in the reference guide section
+4. Update this README
+5. Submit PR or update your local copy
+
+## License
+
+This configuration inherits the license from the ai-menu project where applicable. Individual tools have their own licenses.
+
+## Credits
+
+- Original concept and tool curation: [ai-menu](https://github.com/smpnet74/ai-menu/) by Scott Peterson
+- Pixi adaptation: Scott Peterson
+
+## Support
+
+- For tool-specific issues: Check individual tool documentation
+- For pixi issues: https://pixi.sh/
+- For ai-menu questions: https://github.com/smpnet74/ai-menu/
+
+---
+
+**Pro Tip:** Star this repository and check back regularly as new AI tools emerge. Simply add new tasks to `pixi.toml` as the ecosystem evolves!
