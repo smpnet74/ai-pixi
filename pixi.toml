@@ -223,6 +223,21 @@ SHELL_RC="$HOME/.zshrc" && \
 echo "Run: source ~/.zshrc"
 """, description = "Install Claude Flow by ruvnet" }
 
+# --- Orchestrators ---
+install-openclaw = { cmd = """
+npm install -g openclaw@latest && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias openclaw='pixi run --manifest-path $MANIFEST openclaw'" "$SHELL_RC" 2>/dev/null || (echo "alias openclaw='pixi run --manifest-path $MANIFEST openclaw'" >> "$SHELL_RC" && echo "✓ Added alias: openclaw")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install OpenClaw orchestrator" }
+
+# --- Required by OpenClaw ---
+install-homebrew = { cmd = "bash .pixi-scripts/install-homebrew.sh", description = "Install Homebrew package manager (required by OpenClaw)" }
+
 install-spec-kit = { cmd = """
 uv tool install --from git+https://github.com/github/spec-kit.git specify-cli && \
 MANIFEST=$(pwd)/pixi.toml && \
@@ -322,6 +337,7 @@ echo "Setting up NPM tool aliases in $SHELL_RC..." && \
 (grep -qF "alias qodo='pixi run --manifest-path $MANIFEST qodo'" "$SHELL_RC" 2>/dev/null || (echo "alias qodo='pixi run --manifest-path $MANIFEST qodo'" >> "$SHELL_RC" && echo "  ✓ Added: qodo")) && \
 (grep -qF "alias qoder='pixi run --manifest-path $MANIFEST qodercli'" "$SHELL_RC" 2>/dev/null || (echo "alias qoder='pixi run --manifest-path $MANIFEST qodercli'" >> "$SHELL_RC" && echo "  ✓ Added: qoder")) && \
 (grep -qF "alias claude-flow='pixi run --manifest-path $MANIFEST claude-flow'" "$SHELL_RC" 2>/dev/null || (echo "alias claude-flow='pixi run --manifest-path $MANIFEST claude-flow'" >> "$SHELL_RC" && echo "  ✓ Added: claude-flow")) && \
+(grep -qF "alias openclaw='pixi run --manifest-path $MANIFEST openclaw'" "$SHELL_RC" 2>/dev/null || (echo "alias openclaw='pixi run --manifest-path $MANIFEST openclaw'" >> "$SHELL_RC" && echo "  ✓ Added: openclaw")) && \
 echo "✓ NPM tool aliases added" && \
 echo "Run: source $SHELL_RC"
 """, description = "Setup aliases for npm-based tools" }

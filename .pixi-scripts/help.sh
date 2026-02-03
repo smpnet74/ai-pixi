@@ -69,6 +69,18 @@ echo -e "  ${BLUE}pixi run install-claude-flow${RESET}  ${DIM}# Claude Flow by r
 echo -e "  ${BLUE}pixi run install-spec-kit${RESET}     ${DIM}# Spec Kit by GitHub${RESET}"
 echo ""
 
+# Orchestrators
+echo -e "${YELLOW}${BOLD}🎼 Orchestrators:${RESET}"
+echo ""
+echo -e "  ${BLUE}pixi run install-openclaw${RESET}     ${DIM}# OpenClaw orchestrator${RESET}"
+echo ""
+
+# Required by OpenClaw
+echo -e "${YELLOW}${BOLD}🔌 Required by OpenClaw:${RESET}"
+echo ""
+echo -e "  ${BLUE}pixi run install-homebrew${RESET}     ${DIM}# Homebrew package manager${RESET}"
+echo ""
+
 # Special System Tools
 echo -e "${YELLOW}${BOLD}🛠️  Special System Tools (installed globally):${RESET}"
 echo ""
