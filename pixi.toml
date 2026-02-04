@@ -158,9 +158,20 @@ SHELL_RC="$HOME/.zshrc" && \
 echo "Run: source ~/.zshrc"
 """, description = "Install Qoder by Qwen" }
 
+install-pi = { cmd = """
+npm install -g @mariozechner/pi-coding-agent && \
+MANIFEST=$(pwd)/pixi.toml && \
+SHELL_RC="$HOME/.zshrc" && \
+(grep -q "# AI-Pixi Tool Aliases" "$SHELL_RC" 2>/dev/null || (echo "" >> "$SHELL_RC" && echo "# AI-Pixi Tool Aliases" >> "$SHELL_RC")) && \
+(grep -qF "alias npm='pixi run --manifest-path $MANIFEST npm'" "$SHELL_RC" 2>/dev/null || (echo "alias npm='pixi run --manifest-path $MANIFEST npm'" >> "$SHELL_RC" && echo "✓ Added alias: npm")) && \
+(grep -qF "alias npx='pixi run --manifest-path $MANIFEST npx'" "$SHELL_RC" 2>/dev/null || (echo "alias npx='pixi run --manifest-path $MANIFEST npx'" >> "$SHELL_RC" && echo "✓ Added alias: npx")) && \
+(grep -qF "alias pi='pixi run --manifest-path $MANIFEST pi'" "$SHELL_RC" 2>/dev/null || (echo "alias pi='pixi run --manifest-path $MANIFEST pi'" >> "$SHELL_RC" && echo "✓ Added alias: pi")) && \
+echo "Run: source ~/.zshrc"
+""", description = "Install Pi Coding Agent by Mario Zechner" }
+
 # Batch install all npm-based tools
 install-all-npm = { cmd = """
-npm install -g @sourcegraph/amp@latest @augmentcode/auggie @openai/codex forgecode@latest @google/gemini-cli @vibe-kit/grok-cli opencode-ai @qodo/command @qoder-ai/qodercli && \
+npm install -g @sourcegraph/amp@latest @augmentcode/auggie @openai/codex forgecode@latest @google/gemini-cli @vibe-kit/grok-cli opencode-ai @qodo/command @qoder-ai/qodercli @mariozechner/pi-coding-agent && \
 echo '' && echo '✓ All npm tools installed. Setting up aliases...' && \
 MANIFEST=$(cd $(dirname ${BASH_SOURCE[0]:-$0}) 2>/dev/null && pwd || pwd)/pixi.toml && \
 pixi run --manifest-path $MANIFEST setup-aliases-npm
@@ -348,6 +359,7 @@ echo "Setting up NPM tool aliases in $SHELL_RC..." && \
 (grep -qF "alias opencode='pixi run --manifest-path $MANIFEST opencode'" "$SHELL_RC" 2>/dev/null || (echo "alias opencode='pixi run --manifest-path $MANIFEST opencode'" >> "$SHELL_RC" && echo "  ✓ Added: opencode")) && \
 (grep -qF "alias qodo='pixi run --manifest-path $MANIFEST qodo'" "$SHELL_RC" 2>/dev/null || (echo "alias qodo='pixi run --manifest-path $MANIFEST qodo'" >> "$SHELL_RC" && echo "  ✓ Added: qodo")) && \
 (grep -qF "alias qoder='pixi run --manifest-path $MANIFEST qodercli'" "$SHELL_RC" 2>/dev/null || (echo "alias qoder='pixi run --manifest-path $MANIFEST qodercli'" >> "$SHELL_RC" && echo "  ✓ Added: qoder")) && \
+(grep -qF "alias pi='pixi run --manifest-path $MANIFEST pi'" "$SHELL_RC" 2>/dev/null || (echo "alias pi='pixi run --manifest-path $MANIFEST pi'" >> "$SHELL_RC" && echo "  ✓ Added: pi")) && \
 (grep -qF "alias claude-flow='pixi run --manifest-path $MANIFEST claude-flow'" "$SHELL_RC" 2>/dev/null || (echo "alias claude-flow='pixi run --manifest-path $MANIFEST claude-flow'" >> "$SHELL_RC" && echo "  ✓ Added: claude-flow")) && \
 (grep -qF "alias openclaw='pixi run --manifest-path $MANIFEST openclaw'" "$SHELL_RC" 2>/dev/null || (echo "alias openclaw='pixi run --manifest-path $MANIFEST openclaw'" >> "$SHELL_RC" && echo "  ✓ Added: openclaw")) && \
 (grep -qF "alias mcporter='pixi run --manifest-path $MANIFEST mcporter'" "$SHELL_RC" 2>/dev/null || (echo "alias mcporter='pixi run --manifest-path $MANIFEST mcporter'" >> "$SHELL_RC" && echo "  ✓ Added: mcporter")) && \
@@ -390,6 +402,7 @@ echo "Run: source $SHELL_RC"
 # │ opencode-ai                │ opencode      │ OpenCode CLI               │
 # │ @qodo/command              │ qodo          │ Qodo CLI                   │
 # │ @qoder-ai/qodercli         │ qodercli      │ Qoder by Qwen              │
+# │ @mariozechner/pi-coding-agent │ pi         │ Pi Coding Agent            │
 # └────────────────────────────┴───────────────┴────────────────────────────┘
 #
 # ┌─────────────────────────────────────────────────────────────────────────┐

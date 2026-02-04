@@ -37,6 +37,7 @@ echo -e "  ${BLUE}pixi run install-grok${RESET}         ${DIM}# Grok CLI${RESET}
 echo -e "  ${BLUE}pixi run install-opencode${RESET}     ${DIM}# OpenCode CLI${RESET}"
 echo -e "  ${BLUE}pixi run install-qodo${RESET}         ${DIM}# Qodo CLI${RESET}"
 echo -e "  ${BLUE}pixi run install-qoder${RESET}        ${DIM}# Qoder by Qwen${RESET}"
+echo -e "  ${BLUE}pixi run install-pi${RESET}           ${DIM}# Pi Coding Agent by Mario Zechner${RESET}"
 echo ""
 echo -e "  ${BLUE}pixi run install-all-npm${RESET}      ${DIM}# Install ALL npm-based tools at once${RESET}"
 echo ""
