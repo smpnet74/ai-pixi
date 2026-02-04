@@ -1,6 +1,6 @@
 # AI-Pixi: Comprehensive AI Development Environment
 
-This pixi environment provides **complete parity** with the [ai-menu](https://github.com/smpnet74/ai-menu/) project, offering all the same AI tools and capabilities but in a single, maintainable `pixi.toml` configuration file.
+This pixi environment provides **complete parity** with the [ai-menu](https://github.com/smpnet74/ai-menu/) project, offering all the same AI tools and capabilities but in a single, maintainable `pixi.toml` configuration file. The source of truth for all tools and tasks is always `pixi.toml`.
 
 ## Philosophy
 
@@ -18,7 +18,7 @@ Instead of rebuilding and redeploying a Go-based interactive installer every tim
 # Navigate to the ai-pixi directory
 cd ai-pixi
 
-# Initialize the environment (installs Node.js 22.*, Python 3.12.*, uv)
+# Initialize the environment (installs Node.js 24.*, Python 3.12.*, uv)
 pixi install
 
 # View all available commands
@@ -43,13 +43,27 @@ pixi run install-all
 pixi shell
 ```
 
+## Project Structure
+
+- `pixi.toml` — All dependencies, install tasks, and tool definitions
+- `pixi.lock` — Resolved Pixi lockfile
+- `.pixi-scripts/` — Helper scripts used by tasks (`help.sh`, `install-homebrew.sh`)
+
 ## What's Included
 
-This environment provides access to **15+ AI CLI tools**, **5 VS Code extensions**, **9 special system tools**, and **2 CLI enhancers**.
+This environment provides access to **18+ AI CLI tools**, **5 VS Code extensions**, **9 special system tools**, and **2 CLI enhancers**.
+
+### Core Runtimes (via Pixi)
+
+| Runtime | Version |
+|---------|---------|
+| Node.js | `24.*` |
+| Python | `3.12.*` |
+| uv | `>=0.9.28,<0.10` |
 
 ### AI CLI Tools
 
-#### NPM-based Tools (9 tools)
+#### NPM-based Tools (12 tools)
 | Tool | Command | Installation |
 |------|---------|--------------|
 | Amp | `amp` | `pixi run install-amp` |
@@ -61,20 +75,24 @@ This environment provides access to **15+ AI CLI tools**, **5 VS Code extensions
 | OpenCode | `opencode` | `pixi run install-opencode` |
 | Qodo | `qodo` | `pixi run install-qodo` |
 | Qoder | `qodercli` | `pixi run install-qoder` |
+| Pi Coding Agent | `pi` | `pixi run install-pi` |
+| OpenClaw (orchestrator) | `openclaw` | `pixi run install-openclaw` |
+| MCPorter (agent utility) | `mcporter` | `pixi run install-mcporter` |
 
 **Batch install:** `pixi run install-all-npm`
 
-#### Python/uv-based Tools (3 tools)
+#### Python/uv-based Tools (4 tools)
 | Tool | Command | Installation |
 |------|---------|--------------|
 | Kimi | `kimi` | `pixi run install-kimi` |
 | OpenHands | `openhands` | `pixi run install-openhands` |
 | Modal | `modal` | `pixi run install-modal` |
+| Spec Kit | `spec-kit` | `pixi run install-spec-kit` |
 
 **Batch install:** `pixi run install-all-uv`
 
 #### Custom Installer Tools (4 tools)
-These tools use their own installation scripts:
+These tools use their own installation scripts (curl/bash):
 
 | Tool | Command | Installation |
 |------|---------|--------------|
@@ -152,7 +170,8 @@ pixi run install-all-custom
 
 ### Pattern 3: Install Everything
 ```bash
-# Nuclear option: install all AI CLI tools
+# Install all AI CLI tools (npm + uv + custom + enhancers)
+# Note: does NOT install VS Code extensions or special system tools
 pixi run install-all
 ```
 
@@ -160,14 +179,14 @@ pixi run install-all
 
 ### Method 1: Auto-Added Aliases (Recommended - Just Like ai-menu!)
 
-**Aliases are automatically added when you install tools!** Just like ai-menu, each tool installation adds its alias to `~/.zshrc` or `~/.bashrc`:
+**Aliases are automatically added when you install tools!** Just like ai-menu, each tool installation adds its alias to `~/.zshrc`:
 
 ```bash
 # Install a tool - alias is added automatically
 pixi run install-amp
 
 # Reload your shell
-source ~/.zshrc   # or source ~/.bashrc
+source ~/.zshrc
 
 # Use the tool from anywhere!
 cd ~/my-project
@@ -175,26 +194,23 @@ amp --help
 ```
 
 **What gets aliased automatically:**
-- All npm tools: `amp`, `auggie`, `codex`, `forge`, `gemini`, `grok`, `opencode`, `qodo`, `qodercli`
-- All uv tools: `kimi`, `openhands`, `modal`
-- Enhancers: `claude-flow`, `spec-kit`
+- All npm tools: `amp`, `auggie`, `codex`, `forge`, `gemini`, `grok`, `opencode`, `qodo`, `qodercli`, `pi`, `openclaw`, `mcporter`
+- All uv tools: `kimi`, `openhands`, `modal`, `spec-kit`
+- Enhancers: `claude-flow`
 - Utilities: `npm`, `npx` (added with any npm-based tool)
 
 **Benefits:**
-- ✅ Automatic - no extra steps needed
-- ✅ Per-tool basis - only aliases for installed tools
+- ✅ Automatic — no extra steps needed
+- ✅ Per-tool basis — only aliases for installed tools
 - ✅ Use tools from any directory
 - ✅ Same workflow as ai-menu
-- ✅ Duplicate detection - safe to install multiple times
+- ✅ Duplicate detection — safe to install multiple times
 
 **Manual alias setup (if needed):**
 ```bash
 # Setup all tool aliases at once (for already-installed tools)
-pixi run setup-aliases
-
-# Or setup specific categories
-pixi run setup-aliases-npm    # Only npm-based tools
-pixi run setup-aliases-uv     # Only Python/uv tools
+pixi run setup-aliases-npm    # npm-based tools + enhancers
+pixi run setup-aliases-uv     # Python/uv tools
 
 # Remove all aliases
 pixi run remove-aliases
@@ -241,7 +257,7 @@ pixi run list-uv-tools
 | **Installation** | Build Go binary, run interactive TUI | Edit pixi.toml, run pixi commands |
 | **Updates** | Rebuild and redeploy when tools change | Edit pixi.toml tasks, no rebuild needed |
 | **Tool Selection** | Interactive menu | Command-line tasks |
-| **Shell Aliases** | ✅ Auto-added to ~/.zshrc | ✅ `pixi run setup-aliases` |
+| **Shell Aliases** | ✅ Auto-added to ~/.zshrc | ✅ Auto-added to ~/.zshrc on install |
 | **Global Access** | ✅ Use tools from anywhere | ✅ Use tools from anywhere (after alias setup) |
 | **Flexibility** | Fixed menu options | Easy to add/modify tools |
 | **Learning Curve** | GUI-driven, user-friendly | CLI-driven, more control |
@@ -285,13 +301,24 @@ alias kimi='pixi run --manifest-path /path/to/ai-pixi/pixi.toml kimi'
 
 Or use the pixi shell approach for automatic PATH management.
 
+## Notes and Caveats
+
+- Several tasks run `sudo` or `curl | bash`; review `pixi.toml` before running in production environments.
+- **OpenClaw requires Homebrew.** Run `pixi run install-homebrew` before installing OpenClaw.
+- Some tools install outside the Pixi environment (e.g., custom installers install to `~/.local/bin` or `/usr/local/bin`; special system tools install system-wide via apt).
+- Aliases are appended to `~/.zshrc` only. If you use a different shell (e.g., bash), update the tasks in `pixi.toml` or add aliases manually.
+
 ## Troubleshooting
 
 ### "Command not found" after installation
 
-**Solution:** Some tools require environment restart:
+**Solution:** Some tools require a shell reload:
 ```bash
-# Exit and re-enter pixi shell
+source ~/.zshrc
+```
+
+If that doesn't work, try exiting and re-entering the pixi shell:
+```bash
 exit
 pixi shell
 ```
@@ -306,7 +333,7 @@ npm list -g --depth=0
 
 ### Custom installers fail
 
-**Solution:** Custom installers (droid, goose, kiro, plandex) may install to `~/.local/bin` or require specific system dependencies. Check tool documentation.
+**Solution:** Custom installers (droid, goose, kiro, plandex) may install to `~/.local/bin` or require specific system dependencies. Check individual tool documentation.
 
 ### VS Code extension installation fails
 
@@ -320,7 +347,7 @@ which code
 
 - **Linux (x64)**: ✅ Full support
 - **Linux (ARM64)**: ✅ Full support
-- **macOS**: ⚠️ Most tools supported (may need platform adjustment in pixi.toml)
+- **macOS**: ⚠️ Not configured in pixi.toml (only `linux-64` and `linux-aarch64` platforms declared)
 - **Windows**: ⚠️ WSL2 recommended
 
 ## Contributing
@@ -328,8 +355,8 @@ which code
 To add new AI tools to this configuration:
 
 1. Test the installation command
-2. Add task to `[tasks]` section
-3. Document in the reference guide section
+2. Add task to `[tasks]` section in `pixi.toml`
+3. Document in the reference guide section at the bottom of `pixi.toml`
 4. Update this README
 5. Submit PR or update your local copy
 
