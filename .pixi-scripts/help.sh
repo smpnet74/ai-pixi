@@ -75,6 +75,12 @@ echo ""
 echo -e "  ${BLUE}pixi run install-openclaw${RESET}     ${DIM}# OpenClaw orchestrator${RESET}"
 echo ""
 
+# AI Agent Utilities
+echo -e "${YELLOW}${BOLD}🤖 AI Agent Utilities:${RESET}"
+echo ""
+echo -e "  ${BLUE}pixi run install-mcporter${RESET}     ${DIM}# MCPorter - MCP TypeScript runtime/CLI${RESET}"
+echo ""
+
 # Required by OpenClaw
 echo -e "${YELLOW}${BOLD}🔌 Required by OpenClaw:${RESET}"
 echo ""
