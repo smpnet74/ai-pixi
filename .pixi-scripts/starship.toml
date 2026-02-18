@@ -1,0 +1,56 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+# Replace the '❯' symbol in the prompt with '➜'
+[character] # The name of the module we are configuring is 'character'
+success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+
+# Disable the package module, hiding it from the prompt completely
+[package]
+disabled = true
+
+# Disable container indicator since we're always in a devcontainer
+[container]
+disabled = true
+
+[pixi]
+disabled = false
+format = 'via [$symbol:$environment]($style) '
+symbol = 'pixi'
+style = 'bold blue'
+
+# AWS profile display
+[aws]
+format = 'on [⛵ $symbol$profile(\($region\))]($style) '
+symbol = ''
+style = 'bold yellow'
+disabled = false
+
+[aws.profile_aliases]
+'arn:aws:eks:us-east-2:941497602196:cluster/fargate-eks-cluster' = 'cluster/fargate-eks-cluster'
+
+# Kubernetes context display
+[kubernetes]
+format = 'on [⛵ $context \($namespace\)](dimmed green) '
+disabled = false
+
+[[kubernetes.contexts]]
+context_pattern = 'arn:aws:eks:us-east-2:941497602196:cluster/fargate-eks-cluster'
+context_alias = 'cluster/fargate-eks-cluster'
+
+# Detailed git status indicators
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+conflicted = '🏳'
+ahead = '⇡${count}'
+behind = '⇣${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+untracked = '?${count}'
+stashed = '📦'
+modified = '!${count}'
+staged = '+${count}'
+renamed = '»${count}'
+deleted = '✘${count}'

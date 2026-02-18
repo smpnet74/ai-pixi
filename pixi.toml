@@ -55,6 +55,7 @@ fontconfig = "*"
 # --- Help Command ---
 help = { cmd = "bash .pixi-scripts/help.sh" }
 setup-shell-hook = { cmd = "bash .pixi-scripts/ensure-shell-hook.sh", description = "Add pixi shell-hook to ~/.bashrc and ~/.zshrc for permanent PATH setup" }
+install-starship  = { cmd = "bash .pixi-scripts/install-starship.sh", description = "Install starship prompt + config (skips if already installed/configured)" }
 
 # --- NPM-based AI CLI Tools ---
 install-amp       = { cmd = "npm install -g @sourcegraph/amp@latest && echo 'amp installed'", description = "Install Amp by Sourcegraph" }

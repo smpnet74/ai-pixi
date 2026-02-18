@@ -24,7 +24,10 @@ pixi install
 # 2. Set up permanent shell PATH (do this once)
 pixi run setup-shell-hook
 
-# 3. Activate (or restart your shell)
+# 3. (Optional) Install starship prompt + config — skips if already configured
+pixi run install-starship
+
+# 4. Activate (or restart your shell)
 source ~/.zshrc
 
 # View all available commands
@@ -52,6 +55,8 @@ pixi shell
 - `pixi.lock` — Resolved Pixi lockfile
 - `.pixi-scripts/help.sh` — Formatted help output
 - `.pixi-scripts/ensure-shell-hook.sh` — Injects pixi shell-hook into `~/.bashrc` / `~/.zshrc`
+- `.pixi-scripts/install-starship.sh` — Installs starship prompt + config (idempotent)
+- `.pixi-scripts/starship.toml` — Starship prompt configuration
 - `.pixi-scripts/install-homebrew.sh` — Homebrew installer (required by OpenClaw)
 
 ## What's Included
