@@ -31,6 +31,9 @@ go-yq = "*"
 bat = "*"
 fd-find = "*"
 eza = "*"
+jc = "*"
+delta = "*"
+dasel = "*"
 gh = "*"
 kubernetes-helm = "*"
 lazygit = "*"
@@ -134,6 +137,9 @@ install-eza      = { cmd = "eza --version && echo 'eza managed by pixi (conda-fo
 install-gh       = { cmd = "gh --version && echo 'gh managed by pixi (conda-forge)'", description = "Verify GitHub CLI - installed via conda-forge" }
 install-helm     = { cmd = "helm version --short && echo 'helm managed by pixi (conda-forge)'", description = "Verify helm - installed via conda-forge" }
 install-lazygit  = { cmd = "lazygit --version && echo 'lazygit managed by pixi (conda-forge)'", description = "Verify lazygit - installed via conda-forge" }
+install-jc       = { cmd = "jc --version && echo 'jc managed by pixi (conda-forge)'", description = "Verify jc - JSON converter for CLI output" }
+install-delta    = { cmd = "delta --version && echo 'delta managed by pixi (conda-forge)'", description = "Verify delta - better git diff" }
+install-dasel    = { cmd = "dasel --version && echo 'dasel managed by pixi (conda-forge)'", description = "Verify dasel - JSON/YAML/TOML/CSV query tool" }
 
 # Batch verify all special tools
 install-all-special = { cmd = """
@@ -141,6 +147,7 @@ echo '🔧 Verifying special system tools (managed by conda-forge)...' && \
 rg --version && jq --version && yq --version && bat --version && \
 fd --version && eza --version && gh --version && helm version --short && \
 lazygit --version && pandoc --version | head -n1 && typst --version && \
+jc --version && delta --version && dasel --version && \
 echo '✓ All special tools available via pixi!'
 """, description = "Verify all special system tools (installed via pixi/conda-forge)" }
 

@@ -7,7 +7,7 @@ This pixi environment provides **complete parity** with the [ai-menu](https://gi
 Instead of rebuilding and redeploying a Go-based interactive installer every time the AI tool landscape changes, this approach lets you:
 
 - 📝 Maintain one comprehensive `pixi.toml` with all tools documented
-- 📦 Get CLI utilities (ripgrep, jq, yq, bat, fd, eza, gh, helm, lazygit, pandoc, typst) automatically via `pixi install`
+- 📦 Get CLI utilities (ripgrep, jq, yq, bat, fd, eza, gh, helm, lazygit, pandoc, typst, jc, delta, dasel) automatically via `pixi install`
 - ⚡ Run simple pixi tasks to install AI tools on demand
 - 🔒 Keep everything in an isolated, reproducible pixi environment
 - 🚀 Install tools individually or in batches as requirements evolve
@@ -56,7 +56,7 @@ pixi shell
 
 ## What's Included
 
-This environment provides access to **18+ AI CLI tools**, **5 VS Code extensions**, **11 special system tools** (managed by conda-forge), and **2 CLI enhancers**.
+This environment provides access to **18+ AI CLI tools**, **5 VS Code extensions**, **14 special system tools** (managed by conda-forge), and **2 CLI enhancers**.
 
 ### Core Runtimes (via Pixi)
 
@@ -146,6 +146,9 @@ These are managed by **conda-forge** and installed automatically when you run `p
 | lazygit | `lazygit` | `pixi run install-lazygit` |
 | Pandoc | `pandoc` | `pixi run install-pandoc` |
 | Typst | `typst` | `pixi run install-pandoc` |
+| jc | `jc` | `pixi run install-jc` |
+| delta | `delta` | `pixi run install-delta` |
+| dasel | `dasel` | `pixi run install-dasel` |
 
 **Verify all:** `pixi run install-all-special`
 
