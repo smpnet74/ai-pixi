@@ -7,9 +7,9 @@ This pixi environment provides **complete parity** with the [ai-menu](https://gi
 Instead of rebuilding and redeploying a Go-based interactive installer every time the AI tool landscape changes, this approach lets you:
 
 - 📝 Maintain one comprehensive `pixi.toml` with all tools documented
-- 🔧 Uncomment dependencies as needed for system tools (ripgrep, jq, bat, etc.)
+- 📦 Get CLI utilities (ripgrep, jq, yq, bat, fd, eza, gh, helm, lazygit, pandoc, typst) automatically via `pixi install`
 - ⚡ Run simple pixi tasks to install AI tools on demand
-- 📦 Keep everything in an isolated, reproducible pixi environment
+- 🔒 Keep everything in an isolated, reproducible pixi environment
 - 🚀 Install tools individually or in batches as requirements evolve
 
 ## Quick Start
@@ -18,19 +18,22 @@ Instead of rebuilding and redeploying a Go-based interactive installer every tim
 # Navigate to the ai-pixi directory
 cd ai-pixi
 
-# Initialize the environment (installs Node.js 24.*, Python 3.12.*, uv)
+# 1. Install all dependencies (Node.js, Python, uv, + all CLI tools via conda-forge)
 pixi install
+
+# 2. Set up permanent shell PATH (do this once)
+pixi run setup-shell-hook
+
+# 3. Activate (or restart your shell)
+source ~/.zshrc
 
 # View all available commands
 pixi run help
 
-# Install specific AI tools (aliases added automatically!)
+# Install specific AI tools
 pixi run install-amp         # Install Amp by Sourcegraph
 pixi run install-kimi        # Install Kimi by MoonshotAI
 pixi run install-claude-flow # Install Claude Flow enhancer
-
-# Reload your shell to use the new aliases
-source ~/.zshrc
 
 # Now use the tools from any directory!
 amp --help
@@ -39,7 +42,7 @@ kimi --help
 # Or install everything at once
 pixi run install-all
 
-# Alternative: Activate the pixi shell
+# Alternative: Activate the pixi shell temporarily
 pixi shell
 ```
 
@@ -47,11 +50,13 @@ pixi shell
 
 - `pixi.toml` — All dependencies, install tasks, and tool definitions
 - `pixi.lock` — Resolved Pixi lockfile
-- `.pixi-scripts/` — Helper scripts used by tasks (`help.sh`, `install-homebrew.sh`)
+- `.pixi-scripts/help.sh` — Formatted help output
+- `.pixi-scripts/ensure-shell-hook.sh` — Injects pixi shell-hook into `~/.bashrc` / `~/.zshrc`
+- `.pixi-scripts/install-homebrew.sh` — Homebrew installer (required by OpenClaw)
 
 ## What's Included
 
-This environment provides access to **18+ AI CLI tools**, **5 VS Code extensions**, **9 special system tools**, and **2 CLI enhancers**.
+This environment provides access to **18+ AI CLI tools**, **5 VS Code extensions**, **11 special system tools** (managed by conda-forge), and **2 CLI enhancers**.
 
 ### Core Runtimes (via Pixi)
 
@@ -126,33 +131,37 @@ Install these if you use VS Code (requires `code` CLI in PATH):
 
 ### Special System Tools
 
-These are installed **globally** (system-wide) using apt or official installers, just like in ai-menu. This ensures you get the latest versions directly from official sources.
+These are managed by **conda-forge** and installed automatically when you run `pixi install`. They become available on your PATH after running `pixi run setup-shell-hook`.
 
-| Tool | Command | Installation |
-|------|---------|--------------|
+| Tool | Command | Verify |
+|------|---------|--------|
 | ripgrep | `rg` | `pixi run install-ripgrep` |
 | jq | `jq` | `pixi run install-jq` |
-| yq | `yq` | `pixi run install-yq` |
+| yq (go-yq) | `yq` | `pixi run install-yq` |
 | bat | `bat` | `pixi run install-bat` |
 | fd | `fd` | `pixi run install-fd` |
 | eza | `eza` | `pixi run install-eza` |
 | GitHub CLI | `gh` | `pixi run install-gh` |
 | Helm | `helm` | `pixi run install-helm` |
 | lazygit | `lazygit` | `pixi run install-lazygit` |
+| Pandoc | `pandoc` | `pixi run install-pandoc` |
+| Typst | `typst` | `pixi run install-pandoc` |
 
-**Batch install:** `pixi run install-all-special`
+**Verify all:** `pixi run install-all-special`
 
-**Note:** These tools are installed system-wide (not in pixi environment) and are immediately available in your PATH without needing aliases.
+**Note:** No manual installation needed — these are resolved by pixi and available automatically after shell hook setup.
 
 ## Installation Patterns
 
-### Pattern 1: Install as Needed (Recommended)
+### Pattern 1: First-Time Setup (Recommended)
 ```bash
-# Install only what you need, when you need it
-pixi install                    # Get core dependencies
-pixi run install-amp            # Add Amp (alias auto-added to ~/.zshrc)
-pixi run install-kimi           # Add Kimi (alias auto-added to ~/.zshrc)
-source ~/.zshrc                 # Reload shell
+pixi install                    # Install all deps + CLI tools
+pixi run setup-shell-hook       # Add pixi env to ~/.bashrc and ~/.zshrc (once)
+source ~/.zshrc                 # Activate
+
+# Install AI tools on demand
+pixi run install-amp            # Install Amp
+pixi run install-kimi           # Install Kimi
 amp --version                   # Use from anywhere!
 ```
 
@@ -171,51 +180,30 @@ pixi run install-all-custom
 ### Pattern 3: Install Everything
 ```bash
 # Install all AI CLI tools (npm + uv + custom + enhancers)
-# Note: does NOT install VS Code extensions or special system tools
+# Note: does NOT install VS Code extensions or special system tools (those come via pixi install)
 pixi run install-all
 ```
 
 ## Environment Management
 
-### Method 1: Auto-Added Aliases (Recommended - Just Like ai-menu!)
+### Method 1: Shell Hook (Recommended)
 
-**Aliases are automatically added when you install tools!** Just like ai-menu, each tool installation adds its alias to `~/.zshrc`:
+The `setup-shell-hook` command adds a `pixi shell-hook` eval line to your `~/.bashrc` and `~/.zshrc`. This makes all pixi-managed tools permanently available in every new shell session without needing `pixi shell` or manual aliases.
 
 ```bash
-# Install a tool - alias is added automatically
-pixi run install-amp
+# Run once after pixi install
+pixi run setup-shell-hook
 
-# Reload your shell
+# Activate in current session
 source ~/.zshrc
 
-# Use the tool from anywhere!
-cd ~/my-project
-amp --help
+# All tools now available from anywhere
+rg --version
+jq --version
+amp --version
 ```
 
-**What gets aliased automatically:**
-- All npm tools: `amp`, `auggie`, `codex`, `forge`, `gemini`, `grok`, `opencode`, `qodo`, `qodercli`, `pi`, `openclaw`, `mcporter`
-- All uv tools: `kimi`, `openhands`, `modal`, `spec-kit`
-- Enhancers: `claude-flow`
-- Utilities: `npm`, `npx` (added with any npm-based tool)
-
-**Benefits:**
-- ✅ Automatic — no extra steps needed
-- ✅ Per-tool basis — only aliases for installed tools
-- ✅ Use tools from any directory
-- ✅ Same workflow as ai-menu
-- ✅ Duplicate detection — safe to install multiple times
-
-**Manual alias setup (if needed):**
-```bash
-# Setup all tool aliases at once (for already-installed tools)
-pixi run setup-aliases-npm    # npm-based tools + enhancers
-pixi run setup-aliases-uv     # Python/uv tools
-
-# Remove all aliases
-pixi run remove-aliases
-source ~/.zshrc
-```
+The hook is **idempotent** — safe to run multiple times, it will not add duplicate entries.
 
 ### Method 2: Activating the Pixi Shell
 
@@ -234,7 +222,7 @@ exit
 ### Method 3: Running Without Activation
 
 ```bash
-# Run tools without activating the environment or aliases
+# Run tools without activating the environment
 pixi run amp --version
 pixi run kimi --version
 pixi run npm list -g --depth=0
@@ -257,8 +245,9 @@ pixi run list-uv-tools
 | **Installation** | Build Go binary, run interactive TUI | Edit pixi.toml, run pixi commands |
 | **Updates** | Rebuild and redeploy when tools change | Edit pixi.toml tasks, no rebuild needed |
 | **Tool Selection** | Interactive menu | Command-line tasks |
-| **Shell Aliases** | ✅ Auto-added to ~/.zshrc | ✅ Auto-added to ~/.zshrc on install |
-| **Global Access** | ✅ Use tools from anywhere | ✅ Use tools from anywhere (after alias setup) |
+| **Shell Integration** | ✅ Aliases auto-added to ~/.zshrc | ✅ Shell hook via `pixi run setup-shell-hook` |
+| **Global Access** | ✅ Use tools from anywhere | ✅ Use tools from anywhere (after shell hook) |
+| **System Tools** | Installed via apt | Managed by conda-forge (no sudo needed) |
 | **Flexibility** | Fixed menu options | Easy to add/modify tools |
 | **Learning Curve** | GUI-driven, user-friendly | CLI-driven, more control |
 | **Maintenance** | Go code + rebuild cycle | Single pixi.toml file |
@@ -273,13 +262,13 @@ To add a new AI CLI tool:
 1. **If it's npm-based:**
    ```toml
    [tasks]
-   install-newtool = { cmd = "npm install -g package-name", description = "Install NewTool" }
+   install-newtool = { cmd = "npm install -g package-name && echo 'newtool installed'", description = "Install NewTool" }
    ```
 
 2. **If it's Python-based:**
    ```toml
    [tasks]
-   install-newtool = { cmd = "uv tool install package-name", description = "Install NewTool" }
+   install-newtool = { cmd = "uv tool install package-name && echo 'newtool installed'", description = "Install NewTool" }
    ```
 
 3. **If it uses a custom installer:**
@@ -288,38 +277,25 @@ To add a new AI CLI tool:
    install-newtool = { cmd = "curl -fsSL https://example.com/install.sh | bash", description = "Install NewTool" }
    ```
 
-### Creating Tool Aliases
-
-If you want aliases in your shell (like ai-menu does), add to your `~/.zshrc` or `~/.bashrc`:
-
-```bash
-# AI-Pixi tool aliases
-alias amp='pixi run --manifest-path /path/to/ai-pixi/pixi.toml amp'
-alias kimi='pixi run --manifest-path /path/to/ai-pixi/pixi.toml kimi'
-# ... etc
-```
-
-Or use the pixi shell approach for automatic PATH management.
-
 ## Notes and Caveats
 
-- Several tasks run `sudo` or `curl | bash`; review `pixi.toml` before running in production environments.
 - **OpenClaw requires Homebrew.** Run `pixi run install-homebrew` before installing OpenClaw.
-- Some tools install outside the Pixi environment (e.g., custom installers install to `~/.local/bin` or `/usr/local/bin`; special system tools install system-wide via apt).
-- Aliases are appended to `~/.zshrc` only. If you use a different shell (e.g., bash), update the tasks in `pixi.toml` or add aliases manually.
+- Custom installer tools (droid, goose, kiro, plandex) use `curl | bash` scripts and may install to `~/.local/bin` — review before running in production.
+- Custom installers may install outside the Pixi environment; the shell hook also prepends `~/.local/bin` and `~/.pixi/bin` to PATH so these tools are found.
+- Special system tools (rg, jq, yq, etc.) are in the pixi environment — they are available after `setup-shell-hook` + shell reload, or inside `pixi shell`.
 
 ## Troubleshooting
 
 ### "Command not found" after installation
 
-**Solution:** Some tools require a shell reload:
+**Solution:** Ensure the shell hook is set up and the shell has been reloaded:
 ```bash
+pixi run setup-shell-hook
 source ~/.zshrc
 ```
 
-If that doesn't work, try exiting and re-entering the pixi shell:
+If that doesn't work, try entering the pixi shell directly:
 ```bash
-exit
 pixi shell
 ```
 
@@ -333,7 +309,7 @@ npm list -g --depth=0
 
 ### Custom installers fail
 
-**Solution:** Custom installers (droid, goose, kiro, plandex) may install to `~/.local/bin` or require specific system dependencies. Check individual tool documentation.
+**Solution:** Custom installers (droid, goose, kiro, plandex) may require specific system dependencies. Check individual tool documentation.
 
 ### VS Code extension installation fails
 

@@ -22,6 +22,14 @@ cat <<'EOF'
 ╚════════════════════════════════════════════════════════════════════════╝
 EOF
 
+# First-Time Setup
+echo -e "${GREEN}${BOLD}🚀 First-Time Setup:${RESET}"
+echo ""
+echo -e "  ${BOLD}1.${RESET} ${BLUE}pixi install${RESET}                   ${DIM}# Install all dependencies (incl. rg, jq, yq, bat, fd, eza, gh, helm, lazygit, pandoc, typst)${RESET}"
+echo -e "  ${BOLD}2.${RESET} ${BLUE}pixi run setup-shell-hook${RESET}      ${DIM}# Add pixi env to ~/.bashrc and ~/.zshrc${RESET}"
+echo -e "  ${BOLD}3.${RESET} ${BLUE}source ~/.zshrc${RESET}                ${DIM}# Activate (or restart your shell)${RESET}"
+echo ""
+
 echo -e "${RESET}${BOLD}Available installation tasks:${RESET}"
 echo ""
 
@@ -89,19 +97,29 @@ echo -e "  ${BLUE}pixi run install-homebrew${RESET}     ${DIM}# Homebrew package
 echo ""
 
 # Special System Tools
-echo -e "${YELLOW}${BOLD}🛠️  Special System Tools (installed globally):${RESET}"
+echo -e "${YELLOW}${BOLD}🛠️  Special System Tools (auto-installed via pixi install):${RESET}"
 echo ""
-echo -e "  ${BLUE}pixi run install-ripgrep${RESET}      ${DIM}# Fast search tool (rg)${RESET}"
-echo -e "  ${BLUE}pixi run install-jq${RESET}           ${DIM}# JSON processor${RESET}"
-echo -e "  ${BLUE}pixi run install-yq${RESET}           ${DIM}# YAML processor${RESET}"
-echo -e "  ${BLUE}pixi run install-bat${RESET}          ${DIM}# Better cat with syntax highlighting${RESET}"
-echo -e "  ${BLUE}pixi run install-fd${RESET}           ${DIM}# Better find alternative${RESET}"
-echo -e "  ${BLUE}pixi run install-eza${RESET}          ${DIM}# Modern ls replacement${RESET}"
-echo -e "  ${BLUE}pixi run install-gh${RESET}           ${DIM}# GitHub CLI${RESET}"
-echo -e "  ${BLUE}pixi run install-helm${RESET}         ${DIM}# Kubernetes package manager${RESET}"
-echo -e "  ${BLUE}pixi run install-lazygit${RESET}      ${DIM}# Git TUI${RESET}"
+echo -e "  ${DIM}These tools are managed by conda-forge and available after setup-shell-hook:${RESET}"
+echo -e "  ${DIM}ripgrep (rg), jq, yq, bat, fd, eza, gh, helm, lazygit, pandoc, typst${RESET}"
 echo ""
-echo -e "  ${BLUE}pixi run install-all-special${RESET}  ${DIM}# Install ALL special tools${RESET}"
+echo -e "  ${BLUE}pixi run install-ripgrep${RESET}      ${DIM}# Verify ripgrep${RESET}"
+echo -e "  ${BLUE}pixi run install-jq${RESET}           ${DIM}# Verify jq${RESET}"
+echo -e "  ${BLUE}pixi run install-yq${RESET}           ${DIM}# Verify yq${RESET}"
+echo -e "  ${BLUE}pixi run install-bat${RESET}          ${DIM}# Verify bat${RESET}"
+echo -e "  ${BLUE}pixi run install-fd${RESET}           ${DIM}# Verify fd${RESET}"
+echo -e "  ${BLUE}pixi run install-eza${RESET}          ${DIM}# Verify eza${RESET}"
+echo -e "  ${BLUE}pixi run install-gh${RESET}           ${DIM}# Verify GitHub CLI${RESET}"
+echo -e "  ${BLUE}pixi run install-helm${RESET}         ${DIM}# Verify Helm${RESET}"
+echo -e "  ${BLUE}pixi run install-lazygit${RESET}      ${DIM}# Verify lazygit${RESET}"
+echo ""
+echo -e "  ${BLUE}pixi run install-all-special${RESET}  ${DIM}# Verify ALL special tools${RESET}"
+echo ""
+
+# PDF Generation Tools
+echo -e "${YELLOW}${BOLD}📄 PDF Generation Tools:${RESET}"
+echo ""
+echo -e "  ${BLUE}pixi run install-pandoc${RESET}       ${DIM}# Verify Pandoc + Typst (managed by conda-forge)${RESET}"
+echo -e "  ${BLUE}pixi run install-md2pdf${RESET}       ${DIM}# md2pdf + WeasyPrint (C deps via conda-forge)${RESET}"
 echo ""
 
 # Install Everything
@@ -125,6 +143,7 @@ echo ""
 # Management
 echo -e "${YELLOW}${BOLD}🧹 Management:${RESET}"
 echo ""
+echo -e "  ${BLUE}pixi run setup-shell-hook${RESET}     ${DIM}# Add pixi shell-hook to ~/.bashrc and ~/.zshrc${RESET}"
 echo -e "  ${BLUE}pixi run list-installed${RESET}       ${DIM}# List all installed npm packages${RESET}"
 echo -e "  ${BLUE}pixi run list-uv-tools${RESET}        ${DIM}# List all installed uv tools${RESET}"
 echo ""
@@ -132,9 +151,9 @@ echo ""
 # Tips
 echo -e "${YELLOW}${BOLD}💡 Tips:${RESET}"
 echo ""
-echo -e "  ${DIM}- Aliases are automatically added to ~/.zshrc when you install tools${RESET}"
-echo -e "  ${DIM}- After installing, run: source ~/.zshrc (or restart shell)${RESET}"
-echo -e "  ${DIM}- Then use tools from anywhere: amp, kimi, etc.${RESET}"
-echo -e "  ${DIM}- All tools run in isolated pixi environment${RESET}"
-echo -e "  ${DIM}- Alternative: Use \"pixi shell\" to activate environment${RESET}"
+echo -e "  ${DIM}- Run 'pixi run setup-shell-hook' once to make all tools available permanently${RESET}"
+echo -e "  ${DIM}- After setup-shell-hook, source ~/.zshrc (or restart shell) to activate${RESET}"
+echo -e "  ${DIM}- Shell hook replaces alias management — tools work directly after sourcing${RESET}"
+echo -e "  ${DIM}- All CLI tools (rg, jq, yq, bat, fd, eza, gh, helm, lazygit, etc.) are on PATH${RESET}"
+echo -e "  ${DIM}- Alternative: Use \"pixi shell\" to activate environment temporarily${RESET}"
 echo ""
