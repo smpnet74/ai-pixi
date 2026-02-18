@@ -326,7 +326,8 @@ which code
 
 - **Linux (x64)**: ✅ Full support
 - **Linux (ARM64)**: ✅ Full support
-- **macOS**: ⚠️ Not configured in pixi.toml (only `linux-64` and `linux-aarch64` platforms declared)
+- **macOS (Intel)**: ✅ Full support
+- **macOS (Apple Silicon)**: ⚠️ Not yet configured (`osx-arm64` not declared)
 - **Windows**: ⚠️ WSL2 recommended
 
 ## Contributing
