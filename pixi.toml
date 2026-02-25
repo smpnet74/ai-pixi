@@ -13,7 +13,7 @@ version = "0.1.0"
 description = "Comprehensive AI development environment with all tools from ai-menu"
 authors = ["Scott Peterson <sm_peterson@yahoo.com>"]
 channels = ["conda-forge"]
-platforms = ["linux-64", "linux-aarch64", "osx-64"]
+platforms = ["linux-64", "linux-aarch64", "osx-arm64"]
 
 # ============================================================================
 # CORE DEPENDENCIES (Always Required)
@@ -32,7 +32,7 @@ bat = "*"
 fd-find = "*"
 eza = "*"
 jc = "*"
-delta = "*"
+git-delta = "*"
 dasel = "*"
 gh = "*"
 kubernetes-helm = "*"
