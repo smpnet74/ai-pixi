@@ -68,6 +68,7 @@ echo -e "  ${BLUE}pixi run install-droid${RESET}        ${DIM}# Droid by Factory
 echo -e "  ${BLUE}pixi run install-goose${RESET}        ${DIM}# Goose by Block${RESET}"
 echo -e "  ${BLUE}pixi run install-kiro${RESET}         ${DIM}# Kiro CLI by AWS${RESET}"
 echo -e "  ${BLUE}pixi run install-plandex${RESET}      ${DIM}# Plandex${RESET}"
+echo -e "  ${BLUE}pixi run install-claude${RESET}       ${DIM}# Claude Code CLI${RESET}"
 echo ""
 echo -e "  ${BLUE}pixi run install-all-custom${RESET}   ${DIM}# Install ALL custom installer tools${RESET}"
 echo ""
