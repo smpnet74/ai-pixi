@@ -85,9 +85,10 @@ install-droid = { cmd = "curl -fsSL https://app.factory.ai/cli | sh", descriptio
 install-goose = { cmd = "curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash", description = "Install Goose by Block" }
 install-kiro = { cmd = "curl -fsSL https://cli.kiro.dev/install | bash", description = "Install Kiro CLI by AWS" }
 install-plandex = { cmd = "curl -sL https://plandex.ai/install.sh | bash", description = "Install Plandex" }
+install-claude = { cmd = "curl -fsSL https://claude.ai/install.sh | bash", description = "Install Claude Code CLI" }
 
 # Batch install all custom installer tools
-install-all-custom = { cmd = "curl -fsSL https://app.factory.ai/cli | sh && curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash && curl -fsSL https://cli.kiro.dev/install | bash && curl -sL https://plandex.ai/install.sh | bash", description = "Install all custom installer AI CLI tools" }
+install-all-custom = { cmd = "curl -fsSL https://app.factory.ai/cli | sh && curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash && curl -fsSL https://cli.kiro.dev/install | bash && curl -sL https://plandex.ai/install.sh | bash && curl -fsSL https://claude.ai/install.sh | bash", description = "Install all custom installer AI CLI tools" }
 
 # --- CLI Enhancers ---
 install-claude-flow = { cmd = "npm install -g claude-flow@alpha && echo 'claude-flow installed'", description = "Install Claude Flow by ruvnet" }
