@@ -17,8 +17,28 @@ if command -v starship >/dev/null 2>&1; then
     echo "  starship already installed ($(starship --version)) — skipping binary install"
 else
     echo "  starship not found — installing via official installer..."
-    curl -sS https://starship.rs/install.sh | sh -s -- --yes
-    echo "  starship installed to ~/.local/bin"
+
+    # Choose a sensible bin directory for macOS/Homebrew users
+    PREFERRED_BIN_DIRS=(/opt/homebrew/bin /usr/local/bin "$HOME/.local/bin")
+    BIN_DIR=""
+    for d in "${PREFERRED_BIN_DIRS[@]}"; do
+        if [ -d "$d" ] && [ -w "$d" ]; then
+            BIN_DIR="$d"
+            break
+        fi
+    done
+
+    # If none of the preferred dirs exist or are writable, create $HOME/.local/bin
+    if [ -z "$BIN_DIR" ]; then
+        mkdir -p "$HOME/.local/bin"
+        BIN_DIR="$HOME/.local/bin"
+    fi
+
+    echo "  Configuration"
+    echo "> Bin directory: $BIN_DIR"
+
+    curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$BIN_DIR"
+    echo "  starship installed to $BIN_DIR"
 fi
 
 echo ""
